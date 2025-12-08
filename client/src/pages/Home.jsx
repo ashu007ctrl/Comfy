@@ -5,6 +5,7 @@ import Hero from '../components/Hero';
 import About from '../components/About';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
+import SEOHelmet from '../components/SEOHelmet';
 
 const Home = ({ onStart }) => {
     // Scroll to top on mount/refresh to prevent header overlap
@@ -38,6 +39,12 @@ const Home = ({ onStart }) => {
             animate="visible"
             variants={containerVariants}
         >
+            <SEOHelmet
+                title="Comfy - AI-Powered Stress Detection & Mental Wellness"
+                description="Take our free AI-powered stress assessment test and get personalized stress management recommendations. Scientifically designed questionnaire with instant results powered by Google Gemini AI."
+                keywords="stress test, mental health, stress detection, AI stress analysis, stress management, mental wellness, free stress test, anxiety assessment, mental health assessment"
+                url="https://yourwebsite.com/"
+            />
             <Header />
             <motion.section id="home" variants={sectionVariants}>
                 <Hero onStart={onStart} />

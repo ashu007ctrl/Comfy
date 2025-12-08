@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ArrowLeft, Check } from 'lucide-react';
 import { questions } from '../data/questions';
 import Header from './Header';
+import SEOHelmet from './SEOHelmet';
 import './Questionnaire.css';
 
 const Questionnaire = ({ onSubmit, onCancel }) => {
@@ -122,6 +123,12 @@ const Questionnaire = ({ onSubmit, onCancel }) => {
 
     return (
         <div className="questionnaire-wrapper">
+            <SEOHelmet
+                title="Free Stress Assessment Test - Comfy"
+                description="Take our scientifically designed 10-question stress assessment test. Get instant AI-powered analysis and personalized stress management recommendations."
+                keywords="free stress test, stress assessment, stress questionnaire, mental health test, anxiety test, psychological assessment, stress analysis"
+                url="https://yourwebsite.com/questionnaire"
+            />
             <Header />
 
             <div className="questionnaire-container">

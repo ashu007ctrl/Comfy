@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { RefreshCcw, CheckCircle, AlertTriangle, AlertOctagon } from 'lucide-react';
+import SEOHelmet from './SEOHelmet';
 
 const Results = ({ result, onRetake }) => {
     const { score, level, tips } = result;
@@ -29,6 +30,12 @@ const Results = ({ result, onRetake }) => {
 
     return (
         <div className="container" style={{ maxWidth: '1000px', margin: '4rem auto', paddingBottom: '4rem' }}>
+            <SEOHelmet
+                title="Your Stress Analysis Results - Comfy"
+                description="View your personalized stress assessment results and AI-powered recommendations for better mental wellness and stress management."
+                keywords="stress results, stress analysis, mental health results, stress score, wellness recommendations"
+                url="https://yourwebsite.com/results"
+            />
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
