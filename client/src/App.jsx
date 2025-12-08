@@ -18,7 +18,11 @@ function App() {
     setPage('loading');
     try {
       // Local dev URL, in prod this should be relative or env var
-      const response = await axios.post('http://localhost:3000/api/analyze-stress', { answers });
+      const response = await axios.post(
+  import.meta.env.VITE_API_URL + '/api/analyze-stress',
+  { answers }
+);
+
       setResult(response.data);
       setPage('result');
     } catch (err) {
