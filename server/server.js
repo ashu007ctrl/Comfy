@@ -30,6 +30,11 @@ const calculateScore = (answers) => {
     return Math.round(sum / values.length);
 };
 
+// Keep-Alive Endpoint
+app.get('/ping', (req, res) => {
+    res.json({ status: "Active", timestamp: new Date() });
+});
+
 app.post('/api/analyze-stress', async (req, res) => {
     try {
         const { answers } = req.body;
