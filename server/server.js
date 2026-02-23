@@ -18,7 +18,11 @@ connectDB();
 
 // Middleware
 app.use(cors({
-    origin: process.env.CLIENT_URL || 'https://mycomfyy.netlify.app',
+    origin: [
+        process.env.CLIENT_URL,
+        'https://mycomfyy.netlify.app',
+        'http://localhost:5173'
+    ].filter(Boolean),
     credentials: true, // Allow sending cookies
 }));
 app.use(helmet()); // Security Headers
