@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import Header from '../components/Header';
 import Hero from '../components/Hero';
 import About from '../components/About';
 import Contact from '../components/Contact';
@@ -43,9 +42,8 @@ const Home = ({ onStart }) => {
                 title="Comfy - AI-Powered Stress Detection & Mental Wellness"
                 description="Take our free AI-powered stress assessment test and get personalized stress management recommendations. Scientifically designed questionnaire with instant results powered by Google Gemini AI."
                 keywords="stress test, mental health, stress detection, AI stress analysis, stress management, mental wellness, free stress test, anxiety assessment, mental health assessment"
-                url="https://yourwebsite.com/"
+                url="https://mycomfyy.netlify.app/"
             />
-            <Header />
             <motion.section id="home" variants={sectionVariants}>
                 <Hero onStart={onStart} />
             </motion.section>

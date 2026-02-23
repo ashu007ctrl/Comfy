@@ -1,95 +1,94 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const rateLimit = require('express-rate-limit');
+const cookieParser = require('cookie-parser');
+const connectDB = require('./config/db');
+const assessmentRoutes = require('./routes/assessmentRoutes');
+const errorHandler = require('./middlewares/errorHandler');
+const logger = require('./utils/logger');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+// Connect to Database
+connectDB();
+
+// Middleware
+app.use(cors({
+    origin: process.env.CLIENT_URL || 'https://mycomfyy.netlify.app',
+    credentials: true, // Allow sending cookies
+}));
+app.use(helmet()); // Security Headers
+
+// Use morgan to log HTTP requests, but stream it to winston
+app.use(morgan('combined', { stream: { write: message => logger.info(message.trim()) } }));
 app.use(express.json());
+app.use(cookieParser()); // Added for HTTP-only cookies
 
-// Initialize Gemini
-// NOTE: Ideally getting API Key from env. 
-// If not present, we will gracefully degrade or fail.
-const genAI = process.env.GEMINI_API_KEY
-    ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
-    : null;
+// Rate Limiting (Basic IP protection)
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+    skip: (req, res) => process.env.NODE_ENV === 'development',
+    handler: (req, res, next, options) => {
+        const error = new Error('Too many requests from this IP, please try again later.');
+        error.status = 429;
+        next(error);
+    }
+});
+app.use(limiter);
 
-const model = genAI ? genAI.getGenerativeModel({ model: "gemini-1.5-flash" }) : null;
+// Routes
+const authRoutes = require('./routes/authRoutes');
+const analyticsRoutes = require('./routes/analyticsRoutes');
+const userRoutes = require('./routes/userRoutes');
 
-// Scoring Logic Helper
-const calculateScore = (answers) => {
-    // Answers is object { questionId: value }
-    // Values are 0-100 based on frontend logic
-    // Simple average for now
-    const values = Object.values(answers);
-    if (values.length === 0) return 0;
+app.use('/api/auth', authRoutes);
+app.use('/api', assessmentRoutes);
+app.use('/api', analyticsRoutes);
+app.use('/api/user', userRoutes);
 
-    const sum = values.reduce((acc, val) => acc + (Number(val) || 0), 0);
-    return Math.round(sum / values.length);
-};
-
-// Keep-Alive Endpoint
+// Health Check
 app.get('/ping', (req, res) => {
     res.json({ status: "Active", timestamp: new Date() });
 });
 
-app.post('/api/analyze-stress', async (req, res) => {
-    try {
-        const { answers } = req.body;
-
-        // 1. Calculate Score Deterministically
-        const score = calculateScore(answers);
-
-        let level = 'Low Stress';
-        if (score > 30) level = 'Moderate Stress';
-        if (score > 60) level = 'High Stress';
-
-        // 2. Generate Tips using AI
-        let tips = [
-            "Practice deep breathing exercises.",
-            "Take short breaks during work.",
-            "Ensure you get 7-8 hours of sleep."
-        ]; // Default tips
-
-        if (model) {
-            try {
-                const prompt = `
-          Based on the following stress assessment data (Score: ${score}/100, Level: ${level}), 
-          provide 4 personalized, actionable, short tips (max 10 words each) to reduce stress.
-          Return ONLY a raw JSON array of strings, e.g. ["Tip 1", "Tip 2"].
-          Do not include markdown formatting.
-        `;
-
-                const aiResult = await model.generateContent(prompt);
-                const response = await aiResult.response;
-                const text = response.text();
-
-                // Clean markdown if present (```json ... ```)
-                const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
-                const parsed = JSON.parse(jsonStr);
-                if (Array.isArray(parsed)) {
-                    tips = parsed;
-                }
-            } catch (aiError) {
-                console.error("AI Generation failed:", aiError);
-                // Fallback to default tips
-            }
-        }
-
-        res.json({
-            score,
-            level,
-            tips
-        });
-
-    } catch (error) {
-        console.error("Server Error:", error);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
+// 404 Handler
+app.use((req, res, next) => {
+    const error = new Error('Route not found');
+    error.status = 404;
+    next(error);
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+// Global Error Handler
+app.use(errorHandler);
+
+const server = app.listen(PORT, () => {
+    logger.info(`Server running on https://comfy-o2ia.onrender.com (Port ${PORT})`);
+});
+
+// Graceful Shutdown
+process.on('SIGINT', () => {
+    logger.info('SIGINT signal received: closing HTTP server');
+    server.close(() => {
+        logger.info('HTTP server closed');
+        require('mongoose').connection.close(false).then(() => {
+            logger.info('MongoDB connection closed');
+            process.exit(0);
+        });
+    });
+});
+
+process.on('SIGTERM', () => {
+    logger.info('SIGTERM signal received: closing HTTP server');
+    server.close(() => {
+        logger.info('HTTP server closed');
+        require('mongoose').connection.close(false).then(() => {
+            logger.info('MongoDB connection closed');
+            process.exit(0);
+        });
+    });
 });

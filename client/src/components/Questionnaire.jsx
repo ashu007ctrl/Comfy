@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ArrowLeft, Check } from 'lucide-react';
-import { questions } from '../data/questions';
-import Header from './Header';
+// import { questions } from '../data/questions'; // REMOVED STATIC IMPORT
 import SEOHelmet from './SEOHelmet';
 import './Questionnaire.css';
 
-const Questionnaire = ({ onSubmit, onCancel }) => {
+const Questionnaire = ({ questions, language = 'English', onSubmit, onCancel }) => {
     const [currentStep, setCurrentStep] = useState(0);
     const [answers, setAnswers] = useState({});
     const [direction, setDirection] = useState(1);
+
+    if (!questions || questions.length === 0) {
+        return <div className="p-10 text-center">No questions loaded.</div>;
+    }
 
     const currentQuestion = questions[currentStep];
     const progress = ((currentStep + 1) / questions.length) * 100;
@@ -40,39 +43,56 @@ const Questionnaire = ({ onSubmit, onCancel }) => {
     };
 
     const renderInput = () => {
-        switch (currentQuestion.type) {
+        // Default to scale if type not specified
+        const type = currentQuestion.type || 'scale';
+
+        switch (type) {
             case 'scale':
                 return (
-                    <div className="scale-input">
-                        <div className="scale-labels">
-                            <span>{currentQuestion.minLabel}</span>
-                            <motion.span
-                                key={answers[currentQuestion.id]}
-                                initial={{ scale: 1.2, color: '#c9dbcaff' }}
-                                animate={{ scale: 1, color: '#c9dbcaff' }}
-                                className="scale-value"
-                            >
-                                {answers[currentQuestion.id] || 50}
-                            </motion.span>
-                            <span>{currentQuestion.maxLabel}</span>
-                        </div>
-                        <input
-                            type="range"
-                            min="0"
-                            max="100"
-                            step="10"
-                            value={answers[currentQuestion.id] !== undefined ? answers[currentQuestion.id] : 50}
-                            onChange={(e) => handleAnswer(Number(e.target.value))}
-                            className="gradient-slider"
-                        />
+                    <div className="scale-input-buttons" role="radiogroup">
+                        {[1, 2, 3, 4, 5].map((val) => {
+                            let label = "";
+                            if (language === 'Hindi') {
+                                if (val === 1) label = currentQuestion.minLabel || "कभी नहीं";
+                                if (val === 2) label = "शायद ही कभी";
+                                if (val === 3) label = "कभी-कभी";
+                                if (val === 4) label = "अक्सर";
+                                if (val === 5) label = currentQuestion.maxLabel || "बहुत बार";
+                            } else {
+                                if (val === 1) label = currentQuestion.minLabel || "Never";
+                                if (val === 2) label = "Rarely";
+                                if (val === 3) label = "Sometimes";
+                                if (val === 4) label = "Often";
+                                if (val === 5) label = currentQuestion.maxLabel || "Very Often";
+                            }
+
+                            const isActive = answers[currentQuestion.id] === val;
+                            return (
+                                <motion.button
+                                    key={val}
+                                    role="radio"
+                                    aria-checked={isActive}
+                                    className={`scale-btn ${isActive ? 'active' : ''}`}
+                                    onClick={() => handleAnswer(val)}
+                                    whileHover={{ scale: 1.01, x: 2 }}
+                                    whileTap={{ scale: 0.98 }}
+                                >
+                                    <span className="scale-btn-num">{val}</span>
+                                    <span className="scale-btn-label">{label}</span>
+                                    <span className="scale-btn-val">{val}</span>
+                                </motion.button>
+                            );
+                        })}
                     </div>
                 );
             case 'choice':
                 return (
-                    <div className="choice-input">
+                    <div className="choice-input" role="radiogroup" aria-label="Select an option">
                         {currentQuestion.options.map((opt, index) => (
                             <motion.button
                                 key={opt.text}
+                                role="radio"
+                                aria-checked={answers[currentQuestion.id] === opt.score}
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: index * 0.1 }}
@@ -97,8 +117,10 @@ const Questionnaire = ({ onSubmit, onCancel }) => {
                 );
             case 'yesno':
                 return (
-                    <div className="yesno-input">
+                    <div className="yesno-input" role="radiogroup" aria-label="Yes or No">
                         <motion.button
+                            role="radio"
+                            aria-checked={answers[currentQuestion.id] === currentQuestion.yesScore}
                             className={`yesno-btn ${answers[currentQuestion.id] === currentQuestion.yesScore ? 'active' : ''}`}
                             onClick={() => handleAnswer(currentQuestion.yesScore)}
                             whileHover={{ scale: 1.05 }}
@@ -107,6 +129,8 @@ const Questionnaire = ({ onSubmit, onCancel }) => {
                             Yes
                         </motion.button>
                         <motion.button
+                            role="radio"
+                            aria-checked={answers[currentQuestion.id] === currentQuestion.noScore}
                             className={`yesno-btn ${answers[currentQuestion.id] === currentQuestion.noScore ? 'active' : ''}`}
                             onClick={() => handleAnswer(currentQuestion.noScore)}
                             whileHover={{ scale: 1.05 }}
@@ -127,9 +151,8 @@ const Questionnaire = ({ onSubmit, onCancel }) => {
                 title="Free Stress Assessment Test - Comfy"
                 description="Take our scientifically designed 10-question stress assessment test. Get instant AI-powered analysis and personalized stress management recommendations."
                 keywords="free stress test, stress assessment, stress questionnaire, mental health test, anxiety test, psychological assessment, stress analysis"
-                url="https://yourwebsite.com/questionnaire"
+                url="https://mycomfyy.netlify.app/questionnaire"
             />
-            <Header />
 
             <div className="questionnaire-container">
                 <motion.div

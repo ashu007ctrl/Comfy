@@ -1,6 +1,5 @@
 .questionnaire-wrapper {
     min-height: 100vh;
-    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
     padding-top: 100px;
     position: relative;
     overflow: hidden;
@@ -78,7 +77,7 @@
 .progress-percent {
     font-size: 1.125rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #ffffff, #06b6d4);
+    background: linear-gradient(135deg, #ffffff, var(--primary));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -95,96 +94,96 @@
 
 .progress-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, #7c3aed 0%, #a855f7 50%, #06b6d4 100%);
+    background: var(--gradient-btn);
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.4);
+    box-shadow: 0 2px 8px rgba(167, 139, 250, 0.4);
 }
 
 /* Question Card */
 .question-card {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(20px);
-    border-radius: 32px;
+    background: var(--surface);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-radius: var(--radius-xl);
     padding: 3rem;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow-xl);
+    border: var(--glass-border);
 }
 
 .question-text {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: #ffffff;
+    font-size: 1.55rem;
+    font-weight: 600;
     text-align: center;
-    margin-bottom: 3rem;
-    line-height: 1.4;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+    background: linear-gradient(135deg, #ffffff 0%, var(--primary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 4px 20px rgba(167, 139, 250, 0.2);
+    letter-spacing: 0.02em;
 }
 
 .question-input {
     margin-bottom: 3rem;
 }
 
-/* Scale Input */
-.scale-input {
-    padding: 1rem 0;
-}
-
-.scale-labels {
+/* Scale Input Buttons */
+.scale-input-buttons {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    font-size: 0.95rem;
-    color: rgba(255, 255, 255, 0.7);
-}
-
-.scale-value {
-    font-size: 2rem;
-    font-weight: 800;
-    color: #06b6d4;
-}
-
-.gradient-slider {
+    flex-direction: column;
+    gap: 0.8rem;
     width: 100%;
-    height: 8px;
-    border-radius: 8px;
-    background: linear-gradient(90deg, #4c1d95 0%, #7c3aed 50%, #06b6d4 100%);
-    outline: none;
-    -webkit-appearance: none;
-    appearance: none;
-    cursor: pointer;
 }
 
-.gradient-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #7c3aed, #06b6d4);
+.scale-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1rem 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: var(--glass-border);
+    border-radius: 9999px;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
     transition: all 0.2s ease;
+    backdrop-filter: blur(8px);
+    color: var(--text-primary);
 }
 
-.gradient-slider::-webkit-slider-thumb:hover {
-    transform: scale(1.2);
-    box-shadow: 0 6px 16px rgba(124, 58, 237, 0.6);
+.scale-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
 }
 
-.gradient-slider::-moz-range-thumb {
+.scale-btn.active {
+    background: var(--gradient-btn);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 12px rgba(189, 162, 232, 0.4);
+}
+
+.scale-btn.active .scale-btn-num {
+    color: white;
+}
+
+.scale-btn-num {
+    font-weight: 600;
     width: 24px;
-    height: 24px;
-    border: none;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #7c3aed, #06b6d4);
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
-    transition: all 0.2s ease;
+    text-align: left;
+    color: var(--text-muted);
 }
 
-.gradient-slider::-moz-range-thumb:hover {
-    transform: scale(1.2);
-    box-shadow: 0 6px 16px rgba(124, 58, 237, 0.6);
+.scale-btn-label {
+    flex: 1;
+    text-align: left;
+    font-weight: 500;
+    margin-left: 1rem;
+}
+
+.scale-btn-val {
+    font-weight: 600;
+    width: 24px;
+    text-align: right;
 }
 
 /* Choice Input */
@@ -218,10 +217,10 @@
 }
 
 .choice-btn.active {
-    background: linear-gradient(135deg, #7c3aed, #a855f7);
-    border-color: #7c3aed;
+    background: var(--gradient-btn);
+    border-color: var(--primary);
     color: white;
-    box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4);
+    box-shadow: 0 10px 30px rgba(167, 139, 250, 0.4);
 }
 
 /* Yes/No Input */
@@ -253,10 +252,10 @@
 }
 
 .yesno-btn.active {
-    background: linear-gradient(135deg, #7c3aed, #a855f7);
-    border-color: #7c3aed;
+    background: var(--gradient-btn);
+    border-color: var(--primary);
     color: white;
-    box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4);
+    box-shadow: 0 10px 30px rgba(167, 139, 250, 0.4);
 }
 
 /* Navigation Buttons */
@@ -268,13 +267,13 @@
 }
 
 .back-btn {
-    padding: 1rem 2rem;
+    padding: 12px 24px;
     background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
+    border: var(--glass-border);
+    border-radius: var(--radius-pill);
     font-size: 1rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--text-primary);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -285,16 +284,14 @@
 
 .back-btn:hover {
     background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.3);
     transform: translateX(-3px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .next-btn {
-    padding: 1rem 2rem;
-    background: linear-gradient(135deg, #c30a0a 0%, #4dd816 50%, #ec4899 100%);
-    border: none;
-    border-radius: 12px;
+    padding: 12px 24px;
+    background: var(--gradient-btn);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: var(--radius-pill);
     font-size: 1rem;
     font-weight: 600;
     color: white;
@@ -303,12 +300,12 @@
     align-items: center;
     gap: 0.5rem;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+    box-shadow: 0 4px 12px rgba(189, 162, 232, 0.4);
 }
 
 .next-btn:hover:not(.disabled) {
-    background: linear-gradient(135deg, #4f46e5 0%, #9333ea 50%, #db2777 100%);
-    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+    background: var(--gradient-btn-hover);
+    box-shadow: 0 6px 16px rgba(189, 162, 232, 0.5);
     transform: translateY(-2px);
 }
 
@@ -321,11 +318,11 @@
 /* Responsive */
 @media (max-width: 768px) {
     .questionnaire-wrapper {
-        padding-top: 80px;
+        padding-top: 70px;
     }
 
     .questionnaire-container {
-        padding: 2rem 1rem 4rem;
+        padding: 1.5rem 1rem 4rem;
     }
 
     .question-card {
@@ -334,7 +331,8 @@
     }
 
     .question-text {
-        font-size: 1.375rem;
+        font-size: 1.3rem;
+        margin-bottom: 2rem;
     }
 
     .navigation-buttons {
@@ -353,5 +351,79 @@
 
     .yesno-btn {
         width: 100%;
+    }
+
+    .progress-section {
+        margin-bottom: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .questionnaire-wrapper {
+        padding-top: 64px;
+    }
+
+    .questionnaire-container {
+        padding: 1rem 0.75rem 3rem;
+    }
+
+    .question-card {
+        padding: 1.5rem 1.2rem;
+        border-radius: 20px;
+    }
+
+    .question-text {
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
+    }
+
+    .progress-label {
+        font-size: 0.85rem;
+    }
+
+    .progress-percent {
+        font-size: 1rem;
+    }
+
+    .progress-bar-container {
+        height: 8px;
+    }
+
+    .scale-value {
+        font-size: 1.5rem;
+    }
+
+    .scale-labels {
+        font-size: 0.8rem;
+    }
+
+    .gradient-slider::-webkit-slider-thumb {
+        width: 28px;
+        height: 28px;
+    }
+
+    .gradient-slider::-moz-range-thumb {
+        width: 28px;
+        height: 28px;
+    }
+
+    .choice-btn {
+        padding: 1rem 1.2rem;
+        font-size: 0.9rem;
+        border-radius: 12px;
+    }
+
+    .yesno-btn {
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+        border-radius: 12px;
+    }
+
+    .back-btn,
+    .next-btn {
+        padding: 0.85rem 1.5rem;
+        font-size: 0.9rem;
+        border-radius: 10px;
     }
 }

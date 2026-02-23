@@ -1,30 +1,80 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --primary: #610895;
-  /* Indigo-500 */
-  --primary-hover: #4f46e5;
-  --secondary: #a855f7;
-  /* Purple-500 */
-  --background: #175b9f;
-  --surface: #ffffff;
-  --text-primary: #1e293b;
-  --text-secondary: #64748b;
-  --success: #22c55e;
-  --warning: #eab308;
-  --error: #ef4444;
+  --primary: #A78BFA;
+  --primary-hover: #8B5CF6;
+  --secondary: #38BDF8;
+  --background: #0B0A10;
+  --surface: rgba(20, 18, 28, 0.85);
+  --surface-light: rgba(35, 32, 48, 0.9);
+  --text-primary: #FFFFFF;
+  --text-secondary: #D1D5DB;
+  --text-muted: #9CA3AF;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --error: #EF4444;
 
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 24px;
+  --radius-pill: 9999px;
 
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.04);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 30px 60px -12px rgba(0, 0, 0, 0.7);
 
-  --gradient-bg: linear-gradient(135deg, #360664 0%, #0b494e 100%);
+  --gradient-bg: radial-gradient(circle at top, #1A1625 0%, #0B0A10 60%, #050408 100%);
+  --gradient-btn: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+  --gradient-btn-hover: linear-gradient(135deg, #A78BFA 0%, #8B5CF6 100%);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Header Responsive Styles */
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 8px;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    background: var(--surface);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-left: var(--glass-border);
+    flex-direction: column;
+    padding: 80px 24px 24px;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-xl);
+    z-index: 999;
+  }
+
+  .nav-links.open {
+    right: 0;
+  }
 }
 
 * {
@@ -36,12 +86,11 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 100px;
-  /* Offset for sticky header */
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
-  background: var(--background);
+  font-family: 'Inter', 'Poppins', sans-serif;
+  background-color: var(--background);
   background-image: var(--gradient-bg);
   background-attachment: fixed;
   color: var(--text-primary);
@@ -69,47 +118,51 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 24px;
-  border-radius: var(--radius-md);
-  font-weight: 600;
+  padding: 10px 24px;
+  border-radius: var(--radius-pill);
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   border: none;
-  font-size: 1rem;
+  font-size: 0.95rem;
   text-decoration: none;
 }
 
 .btn-primary {
-  background: var(--primary);
-  color: white;
-  box-shadow: var(--shadow-md);
-  transition: all 0.3s ease;
+  background: var(--gradient-btn);
+  color: #fff;
+  box-shadow: 0 8px 16px -4px rgba(109, 40, 217, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  font-weight: 600;
+  border: none;
 }
 
-.btn-primary:text-primary:hover,
 .btn-primary:hover {
-  background: var(--primary-hover);
+  background: var(--gradient-btn-hover);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 12px 20px -4px rgba(109, 40, 217, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
 }
 
 .btn-outline {
-  background: transparent;
-  border: 2px solid var(--primary);
-  color: var(--primary);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text-primary);
+  backdrop-filter: blur(8px);
 }
 
 .btn-outline:hover {
-  background: var(--primary);
-  color: white;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
 }
 
 .card {
-  background: rgb(198, 206, 204);
+  background: var(--surface);
   border-radius: var(--radius-xl);
   padding: 2rem;
-  box-shadow: var(--shadow-lg);
-  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-xl), 0 0 1px 1px rgba(255, 255, 255, 0.05) inset;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: var(--glass-border);
 }
 
 /* Animations */
@@ -238,7 +291,7 @@ input[type=range]::-webkit-slider-runnable-track {
   width: 100%;
   height: 8px;
   cursor: pointer;
-  background: #e2e8f0;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
 }
 
@@ -255,26 +308,32 @@ input[type=range]:focus {
 .floating-input {
   width: 100%;
   padding: 16px;
-  border: 2px solid #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  /* Dark mode border */
   border-radius: var(--radius-md);
   font-family: inherit;
   font-size: 1rem;
-  background: transparent;
+  background: rgba(0, 0, 0, 0.2);
+  /* Dark mode input bg */
+  color: var(--text-primary);
   transition: all 0.2s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) inset;
 }
 
 .floating-input:focus {
   outline: none;
   border-color: var(--primary);
+  background: rgba(0, 0, 0, 0.3);
 }
 
 .floating-label {
   position: absolute;
   left: 14px;
   top: 16px;
-  background: rgb(240, 231, 231);
+  background: transparent;
+  /* Remove solid background as input is dark */
   padding: 0 4px;
-  color: ;
+  color: var(--text-secondary);
   transition: all 0.2s;
   pointer-events: none;
 }
@@ -285,4 +344,7 @@ input[type=range]:focus {
   font-size: 0.85rem;
   color: var(--primary);
   font-weight: 500;
+  background: var(--background);
+  /* Match the background of the form */
+  border-radius: 4px;
 }

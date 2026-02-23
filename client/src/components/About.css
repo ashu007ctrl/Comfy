@@ -179,3 +179,52 @@
         padding: 2rem 1.5rem;
     }
 }
+
+@media (max-width: 480px) {
+    .about-section {
+        padding: 3.5rem 0;
+    }
+
+    .about-header {
+        margin-bottom: 2.5rem;
+    }
+
+    .about-badge {
+        font-size: 0.75rem;
+        padding: 6px 16px;
+    }
+
+    .about-title {
+        font-size: 1.6rem;
+    }
+
+    .about-description {
+        font-size: 0.9rem;
+        line-height: 1.7;
+    }
+
+    .about-features {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .about-feature-card {
+        padding: 1.5rem 1.2rem;
+        border-radius: 18px;
+    }
+
+    .about-feature-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 16px;
+        margin-bottom: 1.2rem;
+    }
+
+    .about-feature-title {
+        font-size: 1.2rem;
+    }
+
+    .about-feature-text {
+        font-size: 0.88rem;
+    }
+}

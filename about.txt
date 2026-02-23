@@ -1,225 +1,221 @@
 ================================================================================
-                    AI STRESS DETECTION APPLICATION - "COMFY"
+                    AI STRESS DETECTION APPLICATION — "COMFY"
 ================================================================================
 
 PROJECT OVERVIEW
 ----------------
-Comfy is a full-stack AI-powered stress detection web application that analyzes 
-user responses through an interactive questionnaire and provides personalized 
-stress management recommendations. The app uses Google's Gemini AI to generate 
-accurate stress assessments and actionable tips.
+Comfy is a full-stack AI-powered stress detection web application that analyzes
+user responses through a dynamically generated, personalized questionnaire and
+provides tailored stress management recommendations. The app uses Google's
+Gemini 2.5 Flash AI model to generate context-aware assessment questions based
+on the user's profile and then analyzes their responses to deliver actionable
+insights and tips.
 
 
-TECH STACK
-----------
+LATEST TECH STACK (2026)
+------------------------
 
 Frontend:
-  - React.js (v18+) - Component-based UI library
-  - Vite - Fast build tool and development server
-  - Framer Motion - Advanced animations and transitions
-  - Axios - HTTP client for API requests
-  - Lucide React - Modern icon library
-  - React Helmet Async - Dynamic meta tag management for SEO
-  - CSS3 - Custom styling with gradients, glassmorphism, animations
+  - React v19.2            — Component-based UI with hooks and Suspense
+  - Vite v7.2              — Lightning-fast build tool with HMR
+  - Framer Motion v12.23   — Production-grade animations and page transitions
+  - Axios v1.13            — Promise-based HTTP client
+  - Lucide React v0.556    — Modern SVG icon library
+  - React Helmet Async v2  — Dynamic meta tag management for SEO
+  - clsx + tailwind-merge  — Conditional class utilities
+  - CSS3                   — Custom styling (gradients, glassmorphism, animations)
 
 Backend:
-  - Node.js - JavaScript runtime
-  - Express.js - Web application framework
-  - Google Generative AI (Gemini API) - AI-powered stress analysis
-  - CORS - Cross-origin resource sharing
-  - dotenv - Environment variable management
+  - Node.js v22+           — JavaScript runtime (LTS)
+  - Express.js v5          — Next-gen web framework (async error handling)
+  - Mongoose v9            — MongoDB ODM with modern schema features
+  - Google Generative AI   — @google/generative-ai SDK (Gemini 2.5 Flash)
+  - Helmet v8              — HTTP security headers
+  - Morgan v1.10           — HTTP request logger
+  - express-rate-limit v8  — API rate limiting middleware
+  - Joi v18               — Request validation library
+  - dotenv v17             — Environment variable management
+  - CORS v2.8              — Cross-origin resource sharing
+
+Database:
+  - MongoDB (Atlas or Local) — NoSQL document database for assessment history
+  - Graceful degradation    — App runs without DB (history disabled)
+
+AI Model:
+  - Google Gemini 2.5 Flash — Latest generative AI model
+  - Retry with exponential backoff for rate-limit handling
+  - Intelligent fallback system when AI is unavailable
 
 APIs & Services:
-  - Google Gemini API - AI text generation for stress analysis
-  - Web3Forms API - Contact form handling
+  - Google Gemini API       — AI question generation + stress analysis
+  - Web3Forms API           — Contact form email handling
 
 
-KEY FEATURES
-------------
+BACKEND ARCHITECTURE (MVC)
+--------------------------
 
-1. INTERACTIVE QUESTIONNAIRE
-   - 10 carefully designed questions covering multiple stress dimensions
-   - Three input types: Scale (slider), Multiple Choice, Yes/No
-   - Smooth page transitions with directional animations
-   - Progress tracking with animated progress bar
-   - Back/Next navigation with validation
-   - Mobile-responsive design
+The server follows a clean MVC (Model-View-Controller) pattern:
 
-2. AI-POWERED ANALYSIS
-   - Integration with Google Gemini AI model
-   - Generates personalized stress scores (0-100)
-   - Provides stress level categorization (Low/Moderate/High)
-   - Creates custom stress management tips
-   - Contextual analysis based on user responses
-
-3. PROFESSIONAL UI/UX DESIGN
-   - Modern dark theme with purple/indigo gradients
-   - Glassmorphic design elements
-   - Smooth animations throughout (Framer Motion)
-   - Floating background blobs with blur effects
-   - Micro-interactions on buttons and cards
-   - Scroll-triggered animations
-   - Fully responsive (Desktop, Tablet, Mobile)
-
-4. HEADER & NAVIGATION
-   - Fixed position header with backdrop blur
-   - Dynamic styling (changes on scroll)
-   - Smooth scroll navigation to sections
-   - Active section highlighting with animated underline
-   - Mobile-optimized
-
-5. HERO SECTION
-   - Animated badge with pulsing indicator
-   - Gradient text effects
-   - Dual CTA buttons (Primary & Secondary)
-   - Statistics display (Users, Accuracy, Test Time)
-   - Animated scroll-down indicator
-   - Floating meditation image
-
-6. ABOUT SECTION
-   - Feature cards with gradient borders
-   - Icon containers with gradients
-   - Staggered animations on scroll
-   - Hover effects (lift + rotation)
-   - Dark glassmorphic design
-
-7. CONTACT FORM
-   - Web3Forms integration for email handling
-   - Animated input fields with focus states
-   - Form validation
-   - Success/error handling with animations
-   - Gradient submit button
-
-8. RESULTS PAGE
-   - SVG gauge visualization
-   - Animated score display (0-100)
-   - Color-coded stress levels
-   - Personalized tips list
-   - Retake test functionality
-   - Professional card layout
-
-9. HEADER PERSISTENCE
-   - Appears on all pages (Home, Questionnaire, Results)
-   - Scroll prevention on Questionnaire/Results
-   - Proper z-index layering
-   - No content mixing/overlap
-
-
-DESIGN PRINCIPLES
------------------
-
-1. COLOR SCHEME
-   Primary: Purple (#7c3aed) to Indigo (#4c1d95)
-   Accent: Cyan (#06b6d4)
-   Background: Dark gradient (Indigo → Purple → Violet)
-   Text: White with varying opacity levels
-
-2. ANIMATIONS
-   - Entrance animations (fade + slide)
-   - Hover effects (scale, lift, glow)
-   - Page transitions (directional slide)
-   - Progress animations (spring physics)
-   - Scroll-triggered reveals
-   - Micro-interactions (button press, form focus)
-
-3. RESPONSIVE DESIGN
-   - Mobile-first approach
-   - Breakpoints: 480px, 768px, 1024px
-   - Flexible layouts (Grid, Flexbox)
-   - Touch-friendly targets
-   - Optimized spacing and typography
-
-4. ACCESSIBILITY
-   - Semantic HTML5 elements
-   - ARIA labels where needed
-   - Keyboard navigation support
-   - Focus indicators
-   - Readable color contrasts
-
-
-ARCHITECTURE
-------------
-
-Client-Server Architecture:
-  - Frontend (Port 5173): React SPA served by Vite
-  - Backend (Port 3000): Express.js REST API
-  - Communication: JSON over HTTP (Axios)
-
-Project Structure:
-  /client
-    /src
-      /assets - Images and static files
-      /components - Reusable UI components
-      /data - Question data
-      /pages - Page-level components
-      App.jsx - Main application logic
-      index.css - Global styles
-  
   /server
-    server.js - Express server + Gemini AI integration
-    .env - Environment variables (API keys)
+    server.js                       — Application entry point, middleware setup
+    /config
+      db.js                         — MongoDB connection with graceful fallback
+    /models
+      Assessment.js                 — Mongoose schema (userInfo, questions, score,
+                                      level, analysis, personalizedTips)
+    /controllers
+      assessmentController.js       — Request handlers (generateQuestions,
+                                      analyzeStress, getHistory)
+    /services
+      aiService.js                  — Gemini AI integration, prompt engineering,
+                                      retry logic, fallback questions
+    /routes
+      assessmentRoutes.js           — Express router (3 endpoints)
+    .env                            — Environment variables (API keys, DB URI)
+
+Middleware Stack:
+  1. CORS           — Cross-origin requests (open for dev, restrictable for prod)
+  2. Helmet         — Security headers (XSS, MIME sniffing, etc.)
+  3. Morgan         — Request logging (dev format)
+  4. express.json() — JSON body parsing
+  5. Rate Limiter   — 100 requests per 15 minutes per IP
 
 
 API ENDPOINTS
 -------------
 
+POST /api/generate-questions
+  Request:  { userInfo: { age, gender, occupation, mood } }
+  Response: { questions: [{ id, cluster, text, minLabel, maxLabel }] }
+  Details:  AI generates 7 personalized questions based on user profile.
+            Falls back to curated question pool if AI is unavailable.
+
 POST /api/analyze-stress
-  Request: { answers: { questionId: value, ... } }
-  Response: { 
-    score: number, 
-    level: string, 
-    tips: string[],
-    analysis: string 
+  Request:  { userInfo, answers: { questionId: value }, questions }
+  Response: {
+    score: number (0-100),
+    level: "Low" | "Moderate" | "High",
+    analysis: { summary, keyStressors[], stressLevelExplanation },
+    personalizedTips: [{ title, description }],
+    disclaimer: string
   }
+  Details:  Calculates score locally, then gets AI-powered personalized analysis.
+            Falls back to curated tips if AI fails. Saves results to MongoDB.
+
+GET /api/history
+  Response: Array of past assessments (latest 10, sorted by date)
+  Details:  Returns empty array if database is not connected.
+
+GET /ping
+  Response: { status: "Active", timestamp }
+  Details:  Health check endpoint. Frontend pings every 5 minutes to prevent
+            backend sleep on free-tier hosting (Render).
 
 
-WORKFLOW
---------
+FRONTEND ARCHITECTURE
+---------------------
 
-1. User lands on Home page
-2. Clicks "Start Free Test" → Questionnaire loads
-3. Answers 10 questions with Back/Next navigation
-4. Submits answers → Loading state
-5. Backend processes via Gemini AI
-6. Results page displays with score, level, tips
-7. User can retake or navigate back to home
+  /client
+    /src
+      App.jsx                       — Main app logic, page routing, API calls
+      main.jsx                      — React DOM entry point
+      index.css                     — Global styles and design tokens
+      /pages
+        Home.jsx                    — Landing page (Hero, About, Contact, Footer)
+      /components
+        Header.jsx                  — Adaptive header (transparent/dark/light)
+        BasicInfoForm.jsx           — User profile collection form
+        Questionnaire.jsx           — Dynamic question flow with animations
+        Results.jsx                 — Score gauge, analysis, tips display
+        History.jsx                 — Past assessment records (lazy loaded)
+      /assets                       — Images and static files
+    /public
+      robots.txt                    — Search engine crawling rules
+      sitemap.xml                   — XML sitemap for SEO indexing
+
+Page Flow States:
+  home → basic-info → loading-questions → test → loading → result
+                                                          → history
 
 
-PERFORMANCE OPTIMIZATIONS
---------------------------
+KEY FEATURES
+------------
 
-- Lazy loading for heavy components
-- Framer Motion optimized animations (GPU-accelerated)
-- Efficient re-renders with React hooks
-- CSS animations for simple effects
-- Image optimization
-- Code splitting (Vite)
-- Fast development server (Vite HMR)
+1. AI-POWERED DYNAMIC QUESTIONS
+   - Questions generated in real-time by Gemini 2.5 Flash
+   - Personalized to user's age, gender, occupation, and current mood
+   - Grouped into stress clusters (Work, Emotional, Physical, Social)
+   - 1-5 Likert scale with empathetic, conversational phrasing
+   - Intelligent fallback to curated questions on AI failure
+
+2. PERSONALIZED STRESS ANALYSIS
+   - Local score calculation (0-100) from question responses
+   - AI interprets score in context of user's specific occupation
+   - Identifies key stressors from high-scoring answers
+   - Generates 5 actionable, role-specific tips (not generic advice)
+   - Fallback analysis with randomized curated tips
+
+3. ASSESSMENT HISTORY
+   - Results persisted to MongoDB after each assessment
+   - History page shows last 10 assessments with scores and dates
+   - Lazy-loaded with React Suspense for performance
+   - Gracefully handles missing database connection
+
+4. PROFESSIONAL UI/UX
+   - Dark theme with purple/indigo gradient palette
+   - Glassmorphic design elements with backdrop blur
+   - Framer Motion animations throughout (page transitions, reveals)
+   - Floating background blobs with blur effects
+   - SVG gauge visualization for stress score
+   - Micro-interactions (hover, press, focus states)
+   - Fully responsive (Mobile, Tablet, Desktop)
+
+5. ADAPTIVE HEADER
+   - Fixed position with backdrop blur
+   - Theme adapts per page (transparent on home, dark on dark pages)
+   - Dynamic navigation links based on current page context
+   - Scroll-triggered style changes
+   - Mobile-optimized hamburger menu
+
+6. HERO SECTION
+   - Animated badge with pulsing activity indicator
+   - Gradient text effects
+   - Dual CTA buttons (Primary + Secondary)
+   - Statistics display (Users, Accuracy, Test Time)
+   - Floating meditation image
+   - Animated scroll-down indicator
+
+7. CONTACT FORM
+   - Web3Forms integration for serverless email handling
+   - Animated input fields with focus states
+   - Form validation with error feedback
+   - Success/error states with animations
+
+8. KEEP-ALIVE SYSTEM
+   - Frontend pings /ping endpoint every 5 minutes
+   - Prevents free-tier hosting (Render) from sleeping
+   - Immediate ping on app load for fast first response
 
 
-DEPLOYMENT CONSIDERATIONS
---------------------------
+RESILIENCE & ERROR HANDLING
+---------------------------
 
-Environment Variables Required:
-  - GEMINI_API_KEY (Backend)
-  - VITE_API_URL (Frontend - optional for production)
-
-Build Commands:
-  Frontend: npm run build (creates /dist folder)
-  Backend: Node.js deployment (PM2, Docker, etc.)
-
-Hosting Options:
-  - Frontend: Vercel, Netlify, GitHub Pages
-  - Backend: Render, Railway, Heroku, AWS
-  - Full-stack: Vercel (with serverless functions)
+- AI Unavailable:   Falls back to curated question pool + randomized tips
+- Rate Limited:     Exponential backoff retry (up to 3 attempts with jitter)
+- Database Down:    App continues in non-persistent mode (no history saved)
+- API Errors:       User-friendly error banner with retry guidance
+- 404 Routes:       JSON error response from backend
+- Global Handler:   Catches all unhandled server errors gracefully
 
 
 SECURITY FEATURES
 -----------------
 
-- API key stored in environment variables
-- CORS configuration to limit origins
-- Input validation on server
+- Helmet v8 for comprehensive HTTP security headers
+- Rate limiting (100 requests / 15 min per IP)
+- API keys stored in .env (never exposed to client)
+- CORS configuration (restrictable per environment)
+- Input validation with Joi
 - No sensitive data stored client-side
 - HTTPS recommended for production
 
@@ -227,131 +223,132 @@ SECURITY FEATURES
 SEO OPTIMIZATION
 ----------------
 
-10. SEARCH ENGINE OPTIMIZATION (SEO)
-    - Comprehensive meta tags (title, description, keywords)
-    - Open Graph protocol for social media sharing
-    - Twitter Card integration for rich previews
-    - Structured data (JSON-LD) - WebApplication schema
-    - Structured data (JSON-LD) - Organization schema
-    - Canonical URLs to prevent duplicate content
-    - robots.txt for search engine crawler guidance
-    - XML sitemap (sitemap.xml) for better indexing
-    - Mobile optimization tags (theme-color, apple-mobile-web-app)
-    - Dynamic page-specific SEO with React Helmet Async
-    - Semantic HTML5 structure throughout
-    - Proper heading hierarchy (h1, h2, h3)
-    - Alt text for images
-    - Language and locale specifications
-
-11. DYNAMIC META TAG MANAGEMENT
-    - React Helmet Async integration
-    - Page-specific titles and descriptions:
-      * Home: "Comfy - AI-Powered Stress Detection & Mental Wellness"
-      * Questionnaire: "Free Stress Assessment Test - Comfy"
-      * Results: "Your Stress Analysis Results - Comfy"
-    - SEOHelmet component for reusable meta tag logic
-    - Automatic title updates on route changes
-    - Custom keywords per page for targeted SEO
-
-12. SOCIAL MEDIA OPTIMIZATION
-    - Facebook/LinkedIn Open Graph tags
-    - Twitter Card support (summary_large_image)
-    - Custom titles and descriptions for social sharing
-    - Social media image placeholders (og-image, twitter-image)
-    - Professional preview cards when shared
-    - Organization social media links in structured data
+- React Helmet Async for dynamic per-page meta tags
+- Open Graph protocol tags for social media sharing
+- Twitter Card integration for rich link previews
+- JSON-LD structured data (WebApplication + Organization)
+- Canonical URLs to prevent duplicate content issues
+- robots.txt for crawler guidance
+- XML sitemap for search engine indexing
+- Semantic HTML5 structure with proper heading hierarchy
+- Page-specific titles:
+    Home:          "Comfy - AI-Powered Stress Detection & Mental Wellness"
+    Questionnaire: "Free Stress Assessment Test - Comfy"
+    Results:       "Your Stress Analysis Results - Comfy"
 
 
-FUTURE ENHANCEMENTS
--------------------
+DESIGN SYSTEM
+-------------
 
-- User authentication (save test history)
-- Multiple language support
-- Export results as PDF
-- Trend analysis over time
-- Integration with health tracking apps
-- Progressive Web App (PWA) capabilities
-- Email notifications with results
-- Admin dashboard for analytics
+Color Palette:
+  Primary:    Purple #7c3aed → Indigo #4c1d95
+  Accent:     Cyan #06b6d4
+  Background: Dark gradient (Indigo → Purple → Violet)
+  Text:       White with varying opacity
 
+Animations (Framer Motion):
+  - Entrance: fade + slide with stagger
+  - Hover: scale, lift, glow effects
+  - Pages: directional slide transitions
+  - Progress: spring physics
+  - Scroll: intersection-triggered reveals
+  - Micro: button press, form focus, gradient shifts
 
-INTERVIEW TALKING POINTS
--------------------------
-
-1. TECHNICAL DECISIONS
-   - Why React? Component reusability, virtual DOM, ecosystem
-   - Why Gemini AI? Advanced NLP, contextual understanding
-   - Why Vite? Fast builds, modern tooling, HMR
-   - Why Framer Motion? Professional animations, spring physics
-   - Why React Helmet Async? Dynamic meta tags, better SEO control
-
-2. CHALLENGES SOLVED
-   - Header overlap on mobile (scroll-to-top on mount)
-   - Smooth questionnaire navigation (animation direction state)
-   - AI prompt engineering for consistent responses
-   - Responsive design across all breakpoints
-   - Performance with multiple animations
-   - SEO optimization without affecting styling or functionality
-
-3. DESIGN PATTERNS USED
-   - Component composition
-   - Container/Presentational components
-   - Custom hooks for reusability
-   - Controlled components (forms)
-   - Higher-order components (animations)
-   - Reusable SEO component pattern (SEOHelmet)
-
-4. BEST PRACTICES FOLLOWED
-   - Clean code structure
-   - Separation of concerns
-   - DRY principles
-   - Semantic HTML
-   - Accessible UI
-   - Mobile-first responsive design
-   - Git version control
-   - SEO optimization (meta tags, structured data, sitemaps)
-   - Search engine best practices (robots.txt, canonical URLs)
+Responsive Breakpoints:
+  - Mobile:  < 480px
+  - Tablet:  480px - 768px
+  - Desktop: 768px - 1024px
+  - Wide:    > 1024px
 
 
-TESTING
--------
+HOW TO RUN
+----------
 
-Manual Testing Performed:
-  - Cross-browser compatibility (Chrome, Firefox, Safari, Edge)
-  - Mobile responsiveness (iOS, Android)
-  - Form validation
-  - API error handling
-  - Navigation flows
-  - Animation performance
+Prerequisites:
+  - Node.js v22+ installed
+  - MongoDB (local or Atlas URI) — optional, app works without it
 
-Recommended Automated Testing:
-  - Jest for unit tests
-  - React Testing Library for component tests
-  - Cypress for E2E tests
+1. Clone the repository
+
+2. Backend Setup:
+   cd server
+   npm install
+   # Create .env file with:
+   #   GEMINI_API_KEY=your_api_key_here
+   #   MONGO_URI=your_mongodb_uri (optional)
+   node server.js
+   → Server runs on http://localhost:3000
+
+3. Frontend Setup:
+   cd client
+   npm install
+   npm run dev
+   → App runs on http://localhost:5173
+
+4. Open http://localhost:5173 in your browser
+
+
+DEPLOYMENT
+----------
+
+Environment Variables Required:
+  Backend:
+    - GEMINI_API_KEY (Google AI Studio)
+    - MONGO_URI (MongoDB Atlas connection string)
+    - PORT (optional, defaults to 3000)
+  Frontend:
+    - VITE_API_URL (deployed backend URL)
+
+Build Commands:
+  Frontend: npm run build → generates /dist folder
+  Backend:  Direct Node.js deployment (no build step)
+
+Hosting Options:
+  Frontend: Netlify, Vercel, GitHub Pages
+  Backend:  Render, Railway, Fly.io, AWS
+  Database: MongoDB Atlas (free tier available)
 
 
 DEVELOPMENT TIMELINE
 --------------------
 
-Phase 1: Project Setup & Core Structure
-Phase 2: UI Components (Header, Hero, About, Contact, Footer)
-Phase 3: Questionnaire System
-Phase 4: Backend API + Gemini Integration
-Phase 5: Results Page
-Phase 6: Polish & Animations
-Phase 7: Mobile Optimization
-Phase 8: Bug Fixes & Refinements
-Phase 9: SEO Optimization (Meta Tags, Structured Data, Social Media)
+Phase 1:  Project Setup & Core Structure
+Phase 2:  UI Components (Header, Hero, About, Contact, Footer)
+Phase 3:  Basic Info Form + Dynamic Question Generation
+Phase 4:  Backend MVC Architecture + Gemini 2.5 Flash Integration
+Phase 5:  AI Stress Analysis + Fallback Systems
+Phase 6:  Results Page with SVG Gauge Visualization
+Phase 7:  Assessment History with MongoDB Persistence
+Phase 8:  Animations, Polish & Micro-interactions
+Phase 9:  Mobile Optimization & Responsive Design
+Phase 10: SEO, Meta Tags, Structured Data & Social Media
+Phase 11: Security Hardening (Helmet, Rate Limiting, Validation)
+Phase 12: Keep-Alive System & Deployment Optimization
+
+
+FUTURE ENHANCEMENTS
+-------------------
+
+- User authentication (save history per user)
+- Multiple language support (Hindi, Spanish, etc.)
+- Export results as PDF report
+- Trend analysis and progress tracking over time
+- Integration with health tracking apps
+- Progressive Web App (PWA) capabilities
+- Email notifications with assessment results
+- Admin dashboard for usage analytics
+- Dark/Light theme toggle
 
 
 CREDITS
 -------
 
-Developer: [Your Name]
-AI Model: Google Gemini API
-Icons: Lucide React
-Animation Library: Framer Motion
-Contact Form: Web3Forms
+Developer:        [Your Name]
+AI Model:         Google Gemini 2.5 Flash
+Icons:            Lucide React
+Animation:        Framer Motion
+Contact Service:  Web3Forms
+Database:         MongoDB
 
 
 LICENSE

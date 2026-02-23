@@ -238,3 +238,43 @@
         width: 100%;
     }
 }
+
+@media (max-width: 480px) {
+    .contact-section {
+        padding: 3.5rem 0;
+    }
+
+    .contact-card {
+        padding: 2rem 1.2rem;
+        border-radius: 20px;
+    }
+
+    .contact-title {
+        font-size: 1.6rem;
+    }
+
+    .contact-description {
+        font-size: 0.95rem;
+    }
+
+    .contact-form {
+        gap: 1.2rem;
+    }
+
+    .contact-input,
+    .contact-textarea {
+        padding: 14px 16px;
+        font-size: 0.9rem;
+        border-radius: 10px;
+    }
+
+    .contact-textarea {
+        min-height: 120px;
+    }
+
+    .contact-submit-btn {
+        padding: 14px 28px;
+        font-size: 1rem;
+        border-radius: 10px;
+    }
+}

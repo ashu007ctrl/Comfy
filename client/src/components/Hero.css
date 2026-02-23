@@ -3,7 +3,8 @@
     min-height: 100vh;
     display: flex;
     align-items: center;
-    background: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 50%, #581c87 100%);
+    background: transparent;
+    /* Use index.css global gradient */
     overflow: hidden;
     padding-top: 100px;
     /* Offset for fixed header */
@@ -75,14 +76,16 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(6, 182, 212, 0.1);
-    border: 1px solid rgba(6, 182, 212, 0.3);
+    background: rgba(167, 139, 250, 0.15);
+    /* primary-tinted */
+    border: 1px solid rgba(167, 139, 250, 0.4);
     border-radius: 50px;
     padding: 8px 20px;
     margin-bottom: 2rem;
     font-size: 0.875rem;
-    font-weight: 500;
-    color: #dfe5e7;
+    font-weight: 600;
+    color: #ffffff;
+    /* pure white for contrast */
     backdrop-filter: blur(10px);
 }
 
@@ -110,10 +113,10 @@
 
 .hero-title {
     font-size: 4rem;
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1.1;
     margin-bottom: 1.5rem;
-    background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
+    background: linear-gradient(135deg, #ffffff 0%, var(--primary) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -123,7 +126,7 @@
     font-size: 1.25rem;
     line-height: 1.7;
     margin-bottom: 3rem;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.9);
     max-width: 500px;
 }
 
@@ -134,7 +137,7 @@
 }
 
 .hero-btn-primary {
-    background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+    background: var(--gradient-btn);
     color: white;
     font-weight: 700;
     padding: 18px 40px;
@@ -143,7 +146,7 @@
     border: none;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 10px 30px rgba(6, 182, 212, 0.3);
+    box-shadow: 0 10px 30px rgba(167, 139, 250, 0.3);
     display: inline-flex;
     align-items: center;
     gap: 10px;
@@ -151,8 +154,8 @@
 
 .hero-btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 15px 40px rgba(6, 182, 212, 0.5);
-    background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
+    box-shadow: 0 15px 40px rgba(139, 92, 246, 0.5);
+    background: var(--gradient-btn-hover);
 }
 
 .hero-btn-secondary {
@@ -186,16 +189,17 @@
 .hero-stat-number {
     font-size: 2.5rem;
     font-weight: 800;
-    color: #06b6d4;
+    color: var(--primary);
     line-height: 1;
     margin-bottom: 0.5rem;
 }
 
 .hero-stat-label {
     font-size: 0.875rem;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.7);
     text-transform: uppercase;
     letter-spacing: 1px;
+    font-weight: 500;
 }
 
 /* Right Image */

@@ -5,9 +5,9 @@ const SEOHelmet = ({
     title = "Comfy - AI-Powered Stress Detection & Mental Wellness",
     description = "Take our free AI-powered stress assessment test and get personalized stress management recommendations. Scientifically designed questionnaire with instant results powered by Google Gemini AI.",
     keywords = "stress test, mental health, stress detection, AI stress analysis, stress management, mental wellness, anxiety test, stress assessment",
-    ogImage = "https://yourwebsite.com/og-image.png",
-    twitterImage = "https://yourwebsite.com/twitter-image.png",
-    url = "https://yourwebsite.com/",
+    ogImage = "https://mycomfyy.netlify.app/og-image.png",
+    twitterImage = "https://mycomfyy.netlify.app/twitter-image.png",
+    url = "https://mycomfyy.netlify.app/",
     type = "website"
 }) => {
     return (

@@ -96,23 +96,6 @@ const Hero = ({ onStart }) => {
                 </div>
             </div>
 
-            {/* Scroll Down Indicator */}
-            <motion.div
-                className="scroll-down-indicator"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.5, duration: 0.8 }}
-                onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-                <motion.div
-                    animate={{ y: [0, 10, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M12 5v14M19 12l-7 7-7-7" />
-                    </svg>
-                </motion.div>
-            </motion.div>
         </section>
     );
 };

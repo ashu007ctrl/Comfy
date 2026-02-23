@@ -1,0 +1,325 @@
+/* ═══════════════════════════════════════════════════
+   BasicInfoForm — Premium Glassmorphism Design
+   ═══════════════════════════════════════════════════ */
+
+.basic-info-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 5rem 2rem 2rem;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #0f0525 0%, #1a0a3e 30%, #0d2137 70%, #0a3d3f 100%);
+}
+
+/* Animated floating orbs */
+.basic-info-container::before,
+.basic-info-container::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+    animation: floatOrb 8s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.basic-info-container::before {
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, #a855f7 0%, transparent 70%);
+    top: -80px;
+    right: -60px;
+    animation-delay: 0s;
+}
+
+.basic-info-container::after {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, #610895 0%, transparent 70%);
+    bottom: -60px;
+    left: -40px;
+    animation-delay: -4s;
+}
+
+@keyframes floatOrb {
+
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    33% {
+        transform: translate(30px, -20px) scale(1.05);
+    }
+
+    66% {
+        transform: translate(-20px, 15px) scale(0.95);
+    }
+}
+
+/* ─── Card ─── */
+.basic-info-card {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    padding: 2.8rem 2.5rem 2.2rem;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+    width: 100%;
+    max-width: 480px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Shimmer top accent */
+.basic-info-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #a855f7, #c084fc, #a855f7, transparent);
+    border-radius: 999px;
+}
+
+/* ─── Title ─── */
+.basic-info-card h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #e2d0fb 0%, #c084fc 50%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.35rem;
+    text-align: center;
+    letter-spacing: -0.02em;
+}
+
+.subtitle {
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+    text-align: center;
+    line-height: 1.5;
+}
+
+/* ─── Form Groups ─── */
+.form-group {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 0.7rem 1rem;
+    margin-bottom: 0.85rem;
+    text-align: left;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.form-group:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(168, 85, 247, 0.2);
+}
+
+.form-group:focus-within {
+    border-color: rgba(168, 85, 247, 0.5);
+    background: rgba(168, 85, 247, 0.06);
+    box-shadow:
+        0 0 0 3px rgba(168, 85, 247, 0.1),
+        0 0 20px rgba(168, 85, 247, 0.08);
+    transform: translateY(-1px);
+}
+
+/* ─── Labels ─── */
+.form-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.45);
+    margin-bottom: 0.15rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    transition: color 0.3s ease;
+}
+
+.form-group label svg {
+    opacity: 0.6;
+    transition: all 0.3s ease;
+}
+
+.form-group:focus-within label {
+    color: rgba(192, 132, 252, 0.9);
+}
+
+.form-group:focus-within label svg {
+    opacity: 1;
+    color: #c084fc;
+}
+
+/* ─── Inputs ─── */
+.form-group input,
+.form-group select {
+    border: none;
+    background: transparent;
+    font-size: 1.05rem;
+    font-family: inherit;
+    color: rgba(255, 255, 255, 0.92);
+    width: 100%;
+    outline: none;
+    padding: 0.25rem 0 0.1rem;
+    caret-color: #c084fc;
+}
+
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.2);
+    font-weight: 400;
+}
+
+.form-group select {
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.form-group select option {
+    background: #1a0a3e;
+    color: #e2e8f0;
+    padding: 8px;
+}
+
+/* Remove number input spin buttons */
+.form-group input[type="number"]::-webkit-inner-spin-button,
+.form-group input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.form-group input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+/* ─── Submit Button ─── */
+.start-btn {
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%);
+    background-size: 200% 200%;
+    color: white;
+    border: none;
+    padding: 0.95rem 2rem;
+    border-radius: 14px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    margin-top: 1.2rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+        0 4px 20px rgba(124, 58, 237, 0.35),
+        0 0 0 1px rgba(168, 85, 247, 0.2) inset;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: btnShimmer 3s ease-in-out infinite;
+    letter-spacing: 0.01em;
+}
+
+@keyframes btnShimmer {
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+.start-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+    transition: left 0.6s ease;
+}
+
+.start-btn:hover::before {
+    left: 100%;
+}
+
+.start-btn:hover {
+    box-shadow:
+        0 6px 30px rgba(124, 58, 237, 0.5),
+        0 0 0 1px rgba(168, 85, 247, 0.3) inset;
+    transform: translateY(-2px);
+}
+
+.start-btn:active {
+    transform: translateY(0);
+    box-shadow:
+        0 2px 10px rgba(124, 58, 237, 0.3),
+        0 0 0 1px rgba(168, 85, 247, 0.2) inset;
+}
+
+.start-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    animation: none;
+    transform: none;
+}
+
+.start-btn:disabled::before {
+    display: none;
+}
+
+/* ─── Loading spinner for button ─── */
+.start-btn.loading {
+    pointer-events: none;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 520px) {
+    .basic-info-card {
+        padding: 2rem 1.5rem 1.8rem;
+        border-radius: 18px;
+    }
+
+    .basic-info-card h2 {
+        font-size: 1.4rem;
+    }
+
+    .subtitle {
+        font-size: 0.82rem;
+    }
+
+    .form-group {
+        padding: 0.6rem 0.85rem;
+    }
+
+    .form-group input,
+    .form-group select {
+        font-size: 0.95rem;
+    }
+
+    .start-btn {
+        padding: 0.85rem 1.5rem;
+        font-size: 0.95rem;
+    }
+}
