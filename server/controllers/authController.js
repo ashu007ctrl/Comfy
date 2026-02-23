@@ -27,8 +27,8 @@ const sendTokenResponse = (user, statusCode, res, message) => {
     const options = {
         expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict'
+        secure: true, // Always true for HTTPS, Render and Netlify use HTTPS
+        sameSite: 'none' // Required for cross-site cookies (Netlify -> Render)
     };
 
     res
@@ -119,8 +119,8 @@ exports.logout = async (req, res, next) => {
         res.cookie('refreshToken', 'none', {
             expires: new Date(Date.now() + 10 * 1000), // Expires in 10 seconds
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict'
+            secure: true,
+            sameSite: 'none'
         });
 
         formatResponse(res, 200, 'User logged out successfully', {});
