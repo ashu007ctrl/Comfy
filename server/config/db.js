@@ -6,8 +6,8 @@ const connectDB = async () => {
         console.log(`MongoDB Connected: ${conn.connection.host}`);
     } catch (error) {
         console.error(`MongoDB Connection Error: ${error.message}`);
-        console.warn("Running in non-persistent mode (History will not be saved).");
-        // process.exit(1); // Do not exit, allow app to run without DB
+        console.warn("Authentication requires a database. Exiting due to connection failure.");
+        process.exit(1);
     }
 };
 
