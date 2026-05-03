@@ -1,162 +1,298 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { RefreshCcw, CheckCircle, AlertTriangle, AlertOctagon, Info, Lightbulb } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { RefreshCcw, CheckCircle, AlertTriangle, AlertOctagon, Info, Lightbulb, Wind, Target, Share2, Check, ChevronDown, ChevronUp, LogIn } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import SEOHelmet from './SEOHelmet';
+import BreathingTool from './BreathingTool';
+import './Results.css';
 
-const Results = ({ result, onRetake }) => {
-    // Destructure with default fallbacks
+const CLUSTER_META = {
+    "Work/Academic Pressure":   { color: '#a78bfa', emoji: '💼', short: 'Work' },
+    "Emotional Well-being":     { color: '#f472b6', emoji: '💙', short: 'Emotional' },
+    "Physical & Sleep Health":  { color: '#38bdf8', emoji: '🌙', short: 'Physical' },
+    "Social & Lifestyle Balance": { color: '#fbbf24', emoji: '🤝', short: 'Social' },
+    "Lifestyle & Habits":       { color: '#34d399', emoji: '🌿', short: 'Lifestyle' },
+};
+
+const LEVEL_THEME = {
+    Low:      { color: '#34d399', bg: 'rgba(52,211,153,0.12)', border: 'rgba(52,211,153,0.3)', Icon: CheckCircle,  label: 'Low' },
+    Moderate: { color: '#fbbf24', bg: 'rgba(251,191,36,0.12)',  border: 'rgba(251,191,36,0.3)',  Icon: AlertTriangle, label: 'Moderate' },
+    High:     { color: '#f87171', bg: 'rgba(248,113,113,0.12)', border: 'rgba(248,113,113,0.3)', Icon: AlertOctagon,  label: 'High' },
+};
+
+// Detect level key (works with translated strings too)
+const detectLevelKey = (level = '') => {
+    const l = level.toLowerCase();
+    if (l.includes('high') || l.includes('उच्च')) return 'High';
+    if (l.includes('moderate') || l.includes('मध्यम')) return 'Moderate';
+    return 'Low';
+};
+
+// Build cluster scores from questions + answers
+const buildClusterScores = (questions = [], answers = {}) => {
+    const acc = {};
+    questions.forEach(q => {
+        if (!acc[q.cluster]) acc[q.cluster] = { sum: 0, count: 0 };
+        acc[q.cluster].sum += (Number(answers[q.id]) || 0);
+        acc[q.cluster].count += 1;
+    });
+    const out = {};
+    Object.keys(acc).forEach(k => {
+        out[k] = acc[k].count > 0 ? Math.round((acc[k].sum / acc[k].count / 5) * 100) : 0;
+    });
+    return out;
+};
+
+const Results = ({ result, onRetake, questions, answers }) => {
+    const { user } = useAuth();
+    const [showBreathing, setShowBreathing] = useState(false);
+    const [copied, setCopied] = useState(false);
+    const [tipsExpanded, setTipsExpanded] = useState(false);
+
     const {
         score = 0,
-        level = 'Unknown',
+        level = 'Low',
         analysis = {},
         personalizedTips = [],
-        disclaimer = "Results are for informational purposes only."
+        wellnessPlan = {},
+        disclaimer = "Results are for informational purposes only.",
+        clusterScores: serverClusterScores,
     } = result || {};
 
     const { summary, keyStressors, stressLevelExplanation } = analysis;
+    const { weeklyGoals = [], techniqueRecommended, reasonForTechnique } = wellnessPlan;
 
-    // Color logic
-    let color = '#0cc00cff';
-    let Icon = CheckCircle;
+    // Use server cluster scores if available, otherwise build from questions/answers
+    const clusterScores = serverClusterScores || (questions && answers ? buildClusterScores(questions, answers) : {});
 
-    if (score > 30) {
-        color = '#0a75aaff';
-        Icon = AlertTriangle;
-    }
-    if (score > 60) {
-        color = '#0b75aeff';
-        Icon = AlertOctagon;
-    }
+    const levelKey = detectLevelKey(level);
+    const theme = LEVEL_THEME[levelKey] || LEVEL_THEME.Low;
+    const { color, bg, border, Icon } = theme;
+
+    const handleShare = () => {
+        const text = `My Comfy stress assessment:\n• Score: ${Math.round(score)}/100 (${level})\n• Key stressors: ${(keyStressors || []).join(', ')}\n• Top tip: ${personalizedTips[0]?.title || 'N/A'}\n\nTry it free at mycomfyy.netlify.app`;
+        navigator.clipboard.writeText(text).then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        });
+    };
+
+    const visibleTips = tipsExpanded ? personalizedTips : personalizedTips.slice(0, 3);
 
     return (
-        <div className="container" style={{ maxWidth: '1000px', margin: '4rem auto', paddingBottom: '4rem' }}>
+        <div className="res-wrapper">
             <SEOHelmet
-                title="Your Stress Analysis Results - Comfy"
-                description="View your personalized stress assessment results and AI-powered recommendations."
-                keywords="stress results, stress analysis, mental health results, stress score"
+                title="Your Stress Analysis — Comfy"
+                description="View your personalized AI stress assessment results and wellness recommendations."
+                keywords="stress results, stress analysis, mental health, wellness"
                 url="https://mycomfyy.netlify.app/results"
             />
 
-            <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-                className="card"
-                style={{ textAlign: 'center', marginBottom: '3rem' }}
-            >
-                <h2 style={{ marginBottom: '2rem', color: 'var(--text-primary)' }}>Your Stress Assessment</h2>
+            {/* Ambient background */}
+            <div className="res-bg-blob" style={{ background: `radial-gradient(circle, ${color}28, transparent 70%)` }} />
 
-                {/* Gauge Visual */}
-                <div style={{ position: 'relative', width: '250px', height: '140px', margin: '0 auto 1rem', overflow: 'hidden' }}>
+            <div className="res-container">
+
+                {/* ── Score Hero Card ── */}
+                <motion.div
+                    className="res-card res-score-card"
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.7 }}
+                    style={{ borderColor: border }}
+                >
+                    {/* Top glow accent */}
+                    <div className="res-card-accent" style={{ background: `linear-gradient(90deg, transparent, ${color}60, transparent)` }} />
+
+                    {/* Level badge */}
+                    <div className="res-level-badge" style={{ background: bg, borderColor: border, color }}>
+                        <Icon size={18} />
+                        <span>{level} Stress</span>
+                    </div>
 
                     {/* SVG Gauge */}
-                    <svg width="250" height="140" viewBox="0 0 250 140" style={{ position: 'absolute', top: 0, left: 0 }}>
-                        <path d="M 25 125 A 100 100 0 0 1 225 125" fill="none" stroke="#e2e8f0" strokeWidth="20" strokeLinecap="round" />
-                        <motion.path
-                            d="M 25 125 A 100 100 0 0 1 225 125"
-                            fill="none"
-                            stroke={color}
-                            strokeWidth="20"
-                            strokeLinecap="round"
-                            strokeDasharray="314" // Length of arc ~ pi * 100
-                            strokeDashoffset={314 - (314 * score / 100)}
-                            initial={{ strokeDashoffset: 314 }}
-                            animate={{ strokeDashoffset: 314 - (314 * score / 100) }}
-                            transition={{ duration: 1.5, ease: "easeOut" }}
-                        />
-                    </svg>
-
-                    <div style={{ position: 'absolute', bottom: 0, width: '100%', textAlign: 'center' }}>
-                        <span style={{ fontSize: '3rem', fontWeight: 'bold', color: color }}>{Math.round(score)}</span>
-                        <span style={{ fontSize: '1rem', color: '#64748b' }}>/100</span>
+                    <div className="res-gauge-wrap">
+                        <svg viewBox="0 0 220 130" className="res-gauge-svg">
+                            <path d="M 20 115 A 90 90 0 0 1 200 115" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="18" strokeLinecap="round" />
+                            <motion.path
+                                d="M 20 115 A 90 90 0 0 1 200 115"
+                                fill="none"
+                                stroke={color}
+                                strokeWidth="18"
+                                strokeLinecap="round"
+                                strokeDasharray="283"
+                                initial={{ strokeDashoffset: 283 }}
+                                animate={{ strokeDashoffset: 283 - (283 * score / 100) }}
+                                transition={{ duration: 1.8, ease: 'easeOut', delay: 0.3 }}
+                                style={{ filter: `drop-shadow(0 0 8px ${color}80)` }}
+                            />
+                        </svg>
+                        <div className="res-score-center">
+                            <motion.span
+                                className="res-score-num"
+                                style={{ color }}
+                                initial={{ opacity: 0, scale: 0.6 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: 0.6, type: 'spring', stiffness: 200 }}
+                            >
+                                {Math.round(score)}
+                            </motion.span>
+                            <span className="res-score-denom">/100</span>
+                        </div>
                     </div>
-                </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '2rem' }}>
-                    <Icon size={32} color={color} />
-                    <h3 style={{ fontSize: '2rem', color: color }}>{level}</h3>
-                </div>
+                    {/* Summary */}
+                    <div className="res-summary-block">
+                        <p className="res-summary-text">{summary || stressLevelExplanation || 'Analysis complete.'}</p>
+                    </div>
 
-                <div style={{ textAlign: 'left', background: 'rgba(255,255,255,0.05)', padding: '1.5rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}>
-                    <h4 style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1rem', color: 'var(--text-secondary)' }}>
-                        <Info size={18} /> Analysis Summary
-                    </h4>
-                    <p style={{ color: 'var(--text-primary)', lineHeight: '1.8', fontSize: '1.05rem', letterSpacing: '0.01em' }}>{summary || stressLevelExplanation || "Analysis unavailable."}</p>
-                </div>
-
-            </motion.div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-                {/* Personalized Tips Section */}
-                <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.5 }}
-                    className="card"
-                    style={{ gridColumn: '1 / -1' }}
-                >
-                    <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <Lightbulb size={24} color="#eab308" /> Personalized Tips
-                    </h3>
-                    <ul style={{ listStyle: 'none', padding: 0 }}>
-                        {personalizedTips.length > 0 ? personalizedTips.map((tip, index) => (
-                            <li key={index} style={{ marginBottom: '1.5rem', paddingBottom: '1rem', borderBottom: 'var(--glass-border)' }}>
-                                <div style={{ fontWeight: '600', marginBottom: '0.5rem', color: 'var(--text-primary)', fontSize: '1.1rem' }}>
-                                    {tip.title || `Tip ${index + 1}`}
-                                </div>
-                                <div style={{ color: 'var(--text-secondary)', fontSize: '0.98rem', lineHeight: '1.6', letterSpacing: '0.01em' }}>
-                                    {tip.description || tip}
-                                </div>
-                            </li>
-                        )) : (
-                            <li>No specific tips generated.</li>
-                        )}
-                    </ul>
+                    {/* Action row */}
+                    <div className="res-action-row">
+                        <motion.button className="res-breath-btn" onClick={() => setShowBreathing(true)} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                            <Wind size={16} /> Try Breathing Exercise
+                        </motion.button>
+                        <motion.button className="res-share-btn" onClick={handleShare} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                            {copied ? <><Check size={15} /> Copied!</> : <><Share2 size={15} /> Share Results</>}
+                        </motion.button>
+                    </div>
                 </motion.div>
 
-                {/* Key Stressors Section (Full Width Now) */}
+                {/* ── Cluster Breakdown ── */}
+                {Object.keys(clusterScores).length > 0 && (
+                    <motion.div className="res-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+                        <h3 className="res-card-title"><Info size={18} /> Stress Breakdown by Area</h3>
+                        <div className="res-clusters">
+                            {Object.entries(clusterScores).map(([cluster, pct], i) => {
+                                const m = CLUSTER_META[cluster] || { color: '#a78bfa', emoji: '📊', short: cluster };
+                                return (
+                                    <motion.div key={cluster} className="res-cluster-row" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 + i * 0.1 }}>
+                                        <div className="res-cluster-header">
+                                            <span className="res-cluster-name">{m.emoji} {cluster}</span>
+                                            <span className="res-cluster-pct" style={{ color: m.color }}>{pct}%</span>
+                                        </div>
+                                        <div className="res-cluster-track">
+                                            <motion.div
+                                                className="res-cluster-fill"
+                                                style={{ background: `linear-gradient(90deg, ${m.color}80, ${m.color})`, boxShadow: `0 0 10px ${m.color}40` }}
+                                                initial={{ width: 0 }}
+                                                animate={{ width: `${pct}%` }}
+                                                transition={{ duration: 1, delay: 0.5 + i * 0.12, ease: 'easeOut' }}
+                                            />
+                                        </div>
+                                    </motion.div>
+                                );
+                            })}
+                        </div>
+                    </motion.div>
+                )}
+
+                {/* ── Key Stressors ── */}
                 {keyStressors && keyStressors.length > 0 && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.6 }}
-                        className="card"
-                        style={{ gridColumn: '1 / -1' }}
-                    >
-                        <h3 style={{ marginBottom: '1rem', color: '#ef4444' }}>Key Stressors Identified</h3>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                    <motion.div className="res-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }}>
+                        <h3 className="res-card-title" style={{ color: '#f87171' }}>🔍 Key Stressors Identified</h3>
+                        <div className="res-stressors">
                             {keyStressors.map((s, i) => (
-                                <span key={i} style={{ display: 'inline-block', background: 'rgba(239, 68, 68, 0.2)', color: '#fca5a5', padding: '8px 14px', borderRadius: '16px', fontSize: '0.95rem', fontWeight: '500', lineHeight: '1.4' }}>
-                                    {s}
-                                </span>
+                                <span key={i} className="res-stressor-tag">{s}</span>
                             ))}
                         </div>
                     </motion.div>
                 )}
 
-                {/* Take Action Section */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.7 }}
-                    className="card"
-                    style={{ gridColumn: '1 / -1', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}
-                >
-                    <h3 style={{ marginBottom: '1rem' }}>Take Action</h3>
-                    <p style={{ marginBottom: '2rem', color: 'var(--text-secondary)' }}>
-                        Regular assessment helps track your mental well-being.
-                    </p>
-                    <button className="btn btn-outline" onClick={onRetake}>
-                        <RefreshCcw size={20} style={{ marginRight: '10px' }} /> Retake Assessment
+                {/* ── Personalized Tips ── */}
+                {personalizedTips.length > 0 && (
+                    <motion.div className="res-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
+                        <h3 className="res-card-title"><Lightbulb size={18} style={{ color: '#fbbf24' }} /> Personalized Recommendations</h3>
+                        <div className="res-tips">
+                            {visibleTips.map((tip, i) => (
+                                <motion.div key={i} className="res-tip-card" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55 + i * 0.08 }}>
+                                    <div className="res-tip-num">{i + 1}</div>
+                                    <div>
+                                        <div className="res-tip-title">{tip.title || `Tip ${i + 1}`}</div>
+                                        <div className="res-tip-desc">{tip.description || tip}</div>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
+                        {personalizedTips.length > 3 && (
+                            <button className="res-expand-btn" onClick={() => setTipsExpanded(e => !e)}>
+                                {tipsExpanded ? <><ChevronUp size={16} /> Show less</> : <><ChevronDown size={16} /> Show {personalizedTips.length - 3} more tips</>}
+                            </button>
+                        )}
+                    </motion.div>
+                )}
+
+                {/* ── Wellness Plan ── */}
+                {(weeklyGoals.length > 0 || techniqueRecommended) && (
+                    <motion.div className="res-card res-wellness-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
+                        <h3 className="res-card-title"><Target size={18} style={{ color: '#a78bfa' }} /> Your 7-Day Wellness Plan</h3>
+
+                        {weeklyGoals.length > 0 && (
+                            <div className="res-goals">
+                                {weeklyGoals.map((goal, i) => (
+                                    <div key={i} className="res-goal-item">
+                                        <div className="res-goal-check"><Check size={13} /></div>
+                                        <span>{goal}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {techniqueRecommended && (
+                            <div className="res-technique-card">
+                                <div className="res-technique-label">🎯 Recommended Technique</div>
+                                <div className="res-technique-name">{techniqueRecommended}</div>
+                                {reasonForTechnique && <div className="res-technique-reason">{reasonForTechnique}</div>}
+                                {techniqueRecommended.toLowerCase().includes('breath') && (
+                                    <button className="res-try-breath-btn" onClick={() => setShowBreathing(true)}>
+                                        <Wind size={14} /> Try it now →
+                                    </button>
+                                )}
+                            </div>
+                        )}
+                    </motion.div>
+                )}
+
+                {/* ── Guest Save Banner ── */}
+                {!user && (
+                    <motion.div
+                        className="res-guest-banner"
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.8 }}
+                    >
+                        <div className="res-guest-text">
+                            <span className="res-guest-emoji">✨</span>
+                            <div>
+                                <div className="res-guest-title">Want to track your progress over time?</div>
+                                <div className="res-guest-sub">Create a free account to save results, view trends, and access your personal wellness dashboard.</div>
+                            </div>
+                        </div>
+                        <div className="res-guest-actions">
+                            <Link to="/register" className="res-guest-cta-primary">
+                                <LogIn size={15} /> Create Free Account
+                            </Link>
+                            <Link to="/login" className="res-guest-cta-secondary">Sign In</Link>
+                        </div>
+                    </motion.div>
+                )}
+
+                {/* ── Retake ── */}
+                <motion.div className="res-retake-row" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.75 }}>
+                    <button className="res-retake-btn" onClick={onRetake}>
+                        <RefreshCcw size={16} /> Take Another Assessment
                     </button>
                 </motion.div>
 
+                {/* Disclaimer */}
+                <p className="res-disclaimer">{disclaimer}</p>
             </div>
 
-            <div style={{ marginTop: '3rem', textAlign: 'center', fontSize: '0.8rem', color: '#94a3b8' }}>
-                <p>{disclaimer}</p>
-            </div>
-        </div >
+            {/* Breathing Modal */}
+            <AnimatePresence>
+                {showBreathing && <BreathingTool onClose={() => setShowBreathing(false)} />}
+            </AnimatePresence>
+        </div>
     );
 };
 

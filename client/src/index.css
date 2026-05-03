@@ -345,6 +345,54 @@ input[type=range]:focus {
   color: var(--primary);
   font-weight: 500;
   background: var(--background);
-  /* Match the background of the form */
   border-radius: 4px;
+}
+
+/* ═══════════════════════════════════════════
+   Global Mobile Essentials
+   ═══════════════════════════════════════════ */
+
+/* Remove iOS tap highlight on interactive elements */
+a, button, input, select, textarea, [role="button"] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent iOS from zooming on input focus (min 16px font-size) */
+@media (max-width: 768px) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Ensure minimum tap target size for accessibility */
+button, a, [role="button"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Prevent horizontal scroll globally */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Safe padding for notched phones (iPhone X+) */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Better touch scrolling */
+* {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Utility: stack on mobile */
+@media (max-width: 480px) {
+  .mobile-stack {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  .mobile-full {
+    width: 100% !important;
+  }
 }

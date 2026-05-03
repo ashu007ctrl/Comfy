@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import './Hero.css';
 import heroImage from '../assets/hero-meditation.png';
+import geminiLogo from '../assets/gemini-logo11.png';
 
 const Hero = ({ onStart }) => {
     return (
@@ -23,8 +24,12 @@ const Hero = ({ onStart }) => {
                     >
                         {/* Badge */}
                         <div className="hero-badge">
-                            <div className="hero-badge-pulse"></div>
-                            AI-Powered Stress Detection
+                            <img
+                                src={geminiLogo}
+                                alt="Gemini AI"
+                                className="gemini-logo"
+                            />
+                            AI-Powered by Gemini
                         </div>
 
                         {/* Main Title */}

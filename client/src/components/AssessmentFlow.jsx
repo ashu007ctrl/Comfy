@@ -4,15 +4,34 @@ import { useNavigate } from 'react-router-dom';
 import BasicInfoForm from './BasicInfoForm';
 import Questionnaire from './Questionnaire';
 import Results from './Results';
-import History from './History';
 import Header from './Header';
 import Footer from './Footer';
 import { motion } from 'framer-motion';
 
+const LoadingScreen = ({ message }) => (
+    <div style={{
+        minHeight: '60vh', display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center', gap: '1.5rem'
+    }}>
+        <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
+            style={{
+                width: 52, height: 52,
+                border: '4px solid rgba(167,139,250,0.15)',
+                borderTopColor: 'var(--primary)',
+                borderRadius: '50%',
+            }}
+        />
+        <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', fontWeight: 500 }}>{message}</p>
+    </div>
+);
+
 const AssessmentFlow = () => {
-    const [step, setStep] = useState('basic-info'); // basic-info, loading-questions, test, loading, result, history
+    const [step, setStep] = useState('basic-info');
     const [userInfo, setUserInfo] = useState(null);
     const [questions, setQuestions] = useState([]);
+    const [answers, setAnswers] = useState({});
     const [result, setResult] = useState(null);
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -22,15 +41,10 @@ const AssessmentFlow = () => {
     const handleBasicInfoSubmit = async (info) => {
         setUserInfo(info);
         setStep('loading-questions');
+        setError('');
         try {
-            const response = await axios.post(
-                `${API_URL}/api/generate-questions`,
-                { userInfo: info }
-            );
-
-            // The backend formats responses as { success: true, data: { questions: [...] } }
+            const response = await axios.post(`${API_URL}/api/generate-questions`, { userInfo: info });
             const generatedData = response.data.data || response.data;
-
             if (generatedData && generatedData.questions) {
                 setQuestions(generatedData.questions);
                 setStep('test');
@@ -39,29 +53,27 @@ const AssessmentFlow = () => {
             }
         } catch (err) {
             console.error(err);
-            setError('Failed to generate personalized questions. Please try again.');
+            setError('Failed to generate questions. Please try again.');
             setStep('basic-info');
         }
     };
 
-    const submitAnswers = async (answers) => {
+    const submitAnswers = async (ans) => {
+        setAnswers(ans);
         setStep('loading');
+        setError('');
         try {
-            const response = await axios.post(
-                `${API_URL}/api/analyze-stress`,
-                {
-                    userInfo,
-                    answers,
-                    questions
-                }
-            );
-
+            const response = await axios.post(`${API_URL}/api/analyze-stress`, {
+                userInfo,
+                answers: ans,
+                questions,
+            });
             setResult(response.data.data || response.data);
             setStep('result');
         } catch (err) {
             console.error(err);
             setError('Failed to analyze results. Please try again.');
-            setStep('basic-info');
+            setStep('test');
         }
     };
 
@@ -69,7 +81,9 @@ const AssessmentFlow = () => {
         setResult(null);
         setUserInfo(null);
         setQuestions([]);
+        setAnswers({});
         setStep('basic-info');
+        navigate('/dashboard');
     };
 
     return (
@@ -77,39 +91,32 @@ const AssessmentFlow = () => {
             <Header />
             <div style={{ flex: 1, marginTop: '80px', minHeight: '80vh' }}>
                 {step === 'basic-info' && <BasicInfoForm onStart={handleBasicInfoSubmit} />}
-
-                {step === 'loading-questions' && (
-                    <div className="container" style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', margin: '0 auto', maxWidth: '600px' }}>
-                        <div className="loader" style={{
-                            width: '50px', height: '50px',
-                            border: '5px solid rgba(255,255,255,0.1)', borderTopColor: 'var(--primary)',
-                            borderRadius: '50%', animation: 'spin 1s linear infinite'
-                        }}></div>
-                        <p style={{ marginTop: '20px', fontSize: '1.2rem', color: 'var(--text-secondary)' }}>Gathering personalized questions...</p>
-                        <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
-                    </div>
+                {step === 'loading-questions' && <LoadingScreen message="Crafting personalized questions for you…" />}
+                {step === 'test' && (
+                    <Questionnaire
+                        questions={questions}
+                        language={userInfo?.language}
+                        onSubmit={submitAnswers}
+                        onCancel={() => navigate('/dashboard')}
+                    />
                 )}
-
-                {step === 'test' && <Questionnaire questions={questions} language={userInfo?.language} onSubmit={submitAnswers} onCancel={() => navigate('/dashboard')} />}
-
-                {step === 'loading' && (
-                    <div className="container" style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', margin: '0 auto', maxWidth: '600px' }}>
-                        <div className="loader" style={{
-                            width: '50px', height: '50px',
-                            border: '5px solid rgba(255,255,255,0.1)', borderTopColor: 'var(--primary)',
-                            borderRadius: '50%', animation: 'spin 1s linear infinite'
-                        }}></div>
-                        <p style={{ marginTop: '20px', fontSize: '1.2rem', color: 'var(--text-secondary)' }}>Analyzing your responses using AI...</p>
-                        <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
-                    </div>
-                )}
-
+                {step === 'loading' && <LoadingScreen message="Analyzing your responses with AI…" />}
                 {step === 'result' && result && (
-                    <Results result={result} onRetake={() => navigate('/dashboard')} />
+                    <Results
+                        result={result}
+                        questions={questions}
+                        answers={answers}
+                        onRetake={retakeTest}
+                    />
                 )}
-
                 {error && (
-                    <div style={{ position: 'fixed', bottom: '20px', left: '50%', transform: 'translateX(-50%)', background: 'var(--error)', color: 'white', padding: '10px 20px', borderRadius: '8px', zIndex: 1000 }}>
+                    <div style={{
+                        position: 'fixed', bottom: '24px', left: '50%', transform: 'translateX(-50%)',
+                        background: 'var(--error)', color: 'white', padding: '12px 24px',
+                        borderRadius: '12px', zIndex: 1000, fontWeight: 600,
+                        boxShadow: '0 8px 24px rgba(239,68,68,0.4)',
+                        maxWidth: '90vw', textAlign: 'center',
+                    }}>
                         {error}
                     </div>
                 )}

@@ -1,325 +1,368 @@
-/* ═══════════════════════════════════════════════════
-   BasicInfoForm — Premium Glassmorphism Design
-   ═══════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   BasicInfoForm — 2-Step Premium Intake
+   ═══════════════════════════════════════════ */
 
-.basic-info-container {
+.bif-container {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding: 5rem 2rem 2rem;
+    padding: 5rem 1.5rem 3rem;
     position: relative;
     overflow: hidden;
-    background: linear-gradient(135deg, #0f0525 0%, #1a0a3e 30%, #0d2137 70%, #0a3d3f 100%);
+    background: linear-gradient(135deg, #0a0515 0%, #120a2e 40%, #0c1a2e 75%, #061820 100%);
 }
 
-/* Animated floating orbs */
-.basic-info-container::before,
-.basic-info-container::after {
-    content: "";
+/* ─── Ambient orbs ─── */
+.bif-orb {
     position: absolute;
     border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.4;
-    animation: floatOrb 8s ease-in-out infinite;
     pointer-events: none;
+    filter: blur(90px);
+    opacity: 0.35;
+    animation: bifOrb 10s ease-in-out infinite;
 }
 
-.basic-info-container::before {
-    width: 350px;
-    height: 350px;
-    background: radial-gradient(circle, #a855f7 0%, transparent 70%);
-    top: -80px;
-    right: -60px;
+.bif-orb-1 {
+    width: 420px; height: 420px;
+    background: radial-gradient(circle, #7c3aed 0%, transparent 70%);
+    top: -120px; right: -80px;
     animation-delay: 0s;
 }
 
-.basic-info-container::after {
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, #610895 0%, transparent 70%);
-    bottom: -60px;
-    left: -40px;
+.bif-orb-2 {
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, #0ea5e9 0%, transparent 70%);
+    bottom: -80px; left: -60px;
     animation-delay: -4s;
 }
 
-@keyframes floatOrb {
+.bif-orb-3 {
+    width: 240px; height: 240px;
+    background: radial-gradient(circle, #10b981 0%, transparent 70%);
+    top: 50%; left: 30%;
+    animation-delay: -7s;
+    opacity: 0.18;
+}
 
-    0%,
-    100% {
-        transform: translate(0, 0) scale(1);
-    }
-
-    33% {
-        transform: translate(30px, -20px) scale(1.05);
-    }
-
-    66% {
-        transform: translate(-20px, 15px) scale(0.95);
-    }
+@keyframes bifOrb {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(25px, -18px) scale(1.06); }
+    66% { transform: translate(-18px, 14px) scale(0.94); }
 }
 
 /* ─── Card ─── */
-.basic-info-card {
-    background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    padding: 2.8rem 2.5rem 2.2rem;
-    border-radius: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+.bif-card {
+    background: rgba(255, 255, 255, 0.055);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    padding: 2.6rem 2.4rem 2rem;
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.3),
-        0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+        0 8px 40px rgba(0, 0, 0, 0.45),
+        0 0 0 1px rgba(255, 255, 255, 0.04) inset;
     width: 100%;
     max-width: 480px;
     position: relative;
     z-index: 1;
+    overflow: hidden;
 }
 
-/* Shimmer top accent */
-.basic-info-card::before {
-    content: "";
+/* top shimmer accent */
+.bif-shimmer {
     position: absolute;
-    top: 0;
-    left: 50%;
+    top: 0; left: 50%;
     transform: translateX(-50%);
-    width: 60%;
+    width: 55%;
     height: 2px;
-    background: linear-gradient(90deg, transparent, #a855f7, #c084fc, #a855f7, transparent);
+    background: linear-gradient(90deg, transparent, #a855f7, #818cf8, #a855f7, transparent);
     border-radius: 999px;
+    animation: bifShimmerSlide 3s ease-in-out infinite;
 }
 
-/* ─── Title ─── */
-.basic-info-card h2 {
-    font-size: 1.75rem;
+@keyframes bifShimmerSlide {
+    0%, 100% { opacity: 0.6; width: 40%; }
+    50% { opacity: 1; width: 65%; }
+}
+
+/* ─── Step indicator ─── */
+.bif-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 1.6rem;
+}
+
+.bif-step-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: all 0.35s ease;
+}
+
+.bif-step-dot.active {
+    background: #a855f7;
+    width: 24px;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
+}
+
+.bif-step-dot.done {
+    background: #10b981;
+}
+
+.bif-step-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.45);
+    margin-left: 8px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+/* ─── Typography ─── */
+.bif-card h2 {
+    font-size: 1.7rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #e2d0fb 0%, #c084fc 50%, #a855f7 100%);
+    background: linear-gradient(135deg, #e9d5ff 0%, #c084fc 50%, #a78bfa 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: 0.35rem;
     text-align: center;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.025em;
+    margin-bottom: 0.35rem;
 }
 
-.subtitle {
-    color: rgba(255, 255, 255, 0.5);
-    margin-bottom: 2rem;
-    font-size: 0.9rem;
+.bif-subtitle {
     text-align: center;
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.42);
+    margin-bottom: 1.8rem;
     line-height: 1.5;
 }
 
-/* ─── Form Groups ─── */
-.form-group {
+/* ─── Fields ─── */
+.bif-field {
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 14px;
-    padding: 0.7rem 1rem;
-    margin-bottom: 0.85rem;
-    text-align: left;
-    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0.65rem 1rem;
+    margin-bottom: 0.75rem;
     display: flex;
     flex-direction: column;
-    position: relative;
+    transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
-.form-group:hover {
-    background: rgba(255, 255, 255, 0.07);
-    border-color: rgba(168, 85, 247, 0.2);
+.bif-field:hover {
+    background: rgba(255, 255, 255, 0.065);
+    border-color: rgba(168, 85, 247, 0.18);
 }
 
-.form-group:focus-within {
+.bif-field:focus-within {
     border-color: rgba(168, 85, 247, 0.5);
-    background: rgba(168, 85, 247, 0.06);
-    box-shadow:
-        0 0 0 3px rgba(168, 85, 247, 0.1),
-        0 0 20px rgba(168, 85, 247, 0.08);
+    background: rgba(168, 85, 247, 0.055);
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1), 0 0 18px rgba(168, 85, 247, 0.07);
     transform: translateY(-1px);
 }
 
-/* ─── Labels ─── */
-.form-group label {
+.bif-field label {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 0.78rem;
+    gap: 6px;
+    font-size: 0.72rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.45);
-    margin-bottom: 0.15rem;
+    color: rgba(255, 255, 255, 0.4);
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.065em;
+    margin-bottom: 0.2rem;
     transition: color 0.3s ease;
 }
 
-.form-group label svg {
-    opacity: 0.6;
-    transition: all 0.3s ease;
-}
-
-.form-group:focus-within label {
+.bif-field:focus-within label {
     color: rgba(192, 132, 252, 0.9);
 }
 
-.form-group:focus-within label svg {
-    opacity: 1;
-    color: #c084fc;
+.bif-field label svg {
+    opacity: 0.55;
+    transition: opacity 0.3s;
 }
 
-/* ─── Inputs ─── */
-.form-group input,
-.form-group select {
+.bif-field:focus-within label svg {
+    opacity: 1;
+}
+
+.bif-field input,
+.bif-field select {
     border: none;
     background: transparent;
-    font-size: 1.05rem;
+    font-size: 1rem;
     font-family: inherit;
     color: rgba(255, 255, 255, 0.92);
     width: 100%;
     outline: none;
-    padding: 0.25rem 0 0.1rem;
+    padding: 0.2rem 0 0.05rem;
     caret-color: #c084fc;
 }
 
-.form-group input::placeholder {
-    color: rgba(255, 255, 255, 0.2);
+.bif-field input::placeholder {
+    color: rgba(255, 255, 255, 0.18);
     font-weight: 400;
 }
 
-.form-group select {
+.bif-field select {
     cursor: pointer;
     -webkit-appearance: none;
-    -moz-appearance: none;
     appearance: none;
 }
 
-.form-group select option {
-    background: #1a0a3e;
+.bif-field select option {
+    background: #130d2e;
     color: #e2e8f0;
-    padding: 8px;
 }
 
-/* Remove number input spin buttons */
-.form-group input[type="number"]::-webkit-inner-spin-button,
-.form-group input[type="number"]::-webkit-outer-spin-button {
+.bif-field input[type="number"]::-webkit-inner-spin-button,
+.bif-field input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
 
-.form-group input[type="number"] {
-    -moz-appearance: textfield;
+.bif-optional {
+    opacity: 0.45;
+    font-weight: 400;
+    font-size: 0.68rem;
+    text-transform: none;
+    letter-spacing: 0;
+    margin-left: 2px;
 }
 
-/* ─── Submit Button ─── */
-.start-btn {
-    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%);
+/* ─── Buttons ─── */
+.bif-btn {
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 55%, #c084fc 100%);
     background-size: 200% 200%;
     color: white;
     border: none;
-    padding: 0.95rem 2rem;
+    padding: 0.9rem 1.8rem;
     border-radius: 14px;
-    font-size: 1.05rem;
+    font-size: 1rem;
     font-weight: 600;
     font-family: inherit;
     cursor: pointer;
-    margin-top: 1.2rem;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    position: relative;
+    gap: 8px;
+    margin-top: 1rem;
     overflow: hidden;
-    box-shadow:
-        0 4px 20px rgba(124, 58, 237, 0.35),
-        0 0 0 1px rgba(168, 85, 247, 0.2) inset;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    animation: btnShimmer 3s ease-in-out infinite;
-    letter-spacing: 0.01em;
+    position: relative;
+    box-shadow: 0 4px 22px rgba(124, 58, 237, 0.38), 0 0 0 1px rgba(168, 85, 247, 0.2) inset;
+    transition: box-shadow 0.35s ease, transform 0.25s ease;
+    animation: bifBtnPulse 3.5s ease-in-out infinite;
 }
 
-@keyframes btnShimmer {
-
-    0%,
-    100% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
+@keyframes bifBtnPulse {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
 }
 
-.start-btn::before {
+.bif-btn::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
-    transition: left 0.6s ease;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: left 0.55s ease;
 }
 
-.start-btn:hover::before {
-    left: 100%;
-}
+.bif-btn:hover::before { left: 100%; }
 
-.start-btn:hover {
-    box-shadow:
-        0 6px 30px rgba(124, 58, 237, 0.5),
-        0 0 0 1px rgba(168, 85, 247, 0.3) inset;
+.bif-btn:hover:not(.bif-btn--disabled) {
+    box-shadow: 0 6px 32px rgba(124, 58, 237, 0.52), 0 0 0 1px rgba(168, 85, 247, 0.3) inset;
     transform: translateY(-2px);
 }
 
-.start-btn:active {
-    transform: translateY(0);
-    box-shadow:
-        0 2px 10px rgba(124, 58, 237, 0.3),
-        0 0 0 1px rgba(168, 85, 247, 0.2) inset;
-}
-
-.start-btn:disabled {
-    opacity: 0.6;
+.bif-btn--disabled {
+    opacity: 0.5;
     cursor: not-allowed;
     animation: none;
-    transform: none;
+    transform: none !important;
 }
 
-.start-btn:disabled::before {
-    display: none;
-}
-
-/* ─── Loading spinner for button ─── */
-.start-btn.loading {
+.bif-btn--loading {
     pointer-events: none;
+    opacity: 0.8;
+}
+
+@keyframes bifSpin {
+    to { transform: rotate(360deg); }
+}
+
+.bif-spin {
+    animation: bifSpin 1s linear infinite;
+}
+
+/* ─── Back button row ─── */
+.bif-nav-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.bif-back-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    padding: 0.9rem 1.2rem;
+    color: rgba(255,255,255,0.7);
+    font-size: 0.95rem;
+    font-family: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s, border-color 0.2s;
+    flex-shrink: 0;
+}
+
+.bif-back-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.bif-nav-row .bif-btn {
+    flex: 1;
+    margin-top: 0;
 }
 
 /* ─── Responsive ─── */
 @media (max-width: 520px) {
-    .basic-info-card {
-        padding: 2rem 1.5rem 1.8rem;
-        border-radius: 18px;
+    .bif-card {
+        padding: 2rem 1.4rem 1.6rem;
+        border-radius: 20px;
     }
 
-    .basic-info-card h2 {
-        font-size: 1.4rem;
-    }
+    .bif-card h2 { font-size: 1.45rem; }
+    .bif-subtitle { font-size: 0.82rem; }
+    .bif-field { padding: 0.6rem 0.85rem; }
 
-    .subtitle {
-        font-size: 0.82rem;
-    }
+    .bif-field input,
+    .bif-field select { font-size: 0.95rem; }
 
-    .form-group {
-        padding: 0.6rem 0.85rem;
-    }
+    .bif-btn { padding: 0.85rem 1.4rem; font-size: 0.95rem; }
+}
 
-    .form-group input,
-    .form-group select {
-        font-size: 0.95rem;
-    }
-
-    .start-btn {
-        padding: 0.85rem 1.5rem;
-        font-size: 0.95rem;
-    }
+@media (max-width: 420px) {
+    .bif-wrapper { padding: 80px 0.75rem 2rem; }
+    .bif-card { padding: 1.6rem 1.1rem 1.4rem; border-radius: 18px; }
+    .bif-card h2 { font-size: 1.3rem; }
+    .bif-step-label { display: none; } /* hide step text, keep dots */
+    .bif-grid-2 { grid-template-columns: 1fr; }  /* stack 2-col selects */
+    .bif-orb { display: none; } /* hide decorative blobs for perf */
+    .bif-nav-row { flex-direction: column; }
+    .bif-nav-row .bif-btn { width: 100%; justify-content: center; }
+    .bif-back-btn { width: 100%; justify-content: center; }
 }

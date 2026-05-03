@@ -28,10 +28,12 @@ exports.generateQuestions = async (req, res, next) => {
     try {
         const { userInfo } = req.body;
 
-        // AI Cost Protection
-        const canProceed = await checkAiLimit(req.user, res);
-        if (!canProceed) {
-            return formatResponse(res, 429, 'AI generation limit reached', null, 'You have reached your daily limit for AI assessments. Please try again tomorrow.');
+        // AI Cost Protection — only for logged-in users
+        if (req.user) {
+            const canProceed = await checkAiLimit(req.user, res);
+            if (!canProceed) {
+                return formatResponse(res, 429, 'AI generation limit reached', null, 'You have reached your daily limit for AI assessments. Please try again tomorrow.');
+            }
         }
 
         const data = await aiService.generateQuestions(userInfo);
@@ -52,10 +54,12 @@ exports.analyzeStress = async (req, res, next) => {
     try {
         const { userInfo, answers, questions } = req.body;
 
-        // AI Cost Protection
-        const canProceed = await checkAiLimit(req.user, res);
-        if (!canProceed) {
-            return formatResponse(res, 429, 'AI generation limit reached', null, 'You have reached your daily limit for AI assessments. Please try again tomorrow.');
+        // AI Cost Protection — only for logged-in users
+        if (req.user) {
+            const canProceed = await checkAiLimit(req.user, res);
+            if (!canProceed) {
+                return formatResponse(res, 429, 'AI generation limit reached', null, 'You have reached your daily limit for AI assessments. Please try again tomorrow.');
+            }
         }
 
         // 1. Calculate Score Locally
@@ -64,13 +68,17 @@ exports.analyzeStress = async (req, res, next) => {
         const maxPossible = (questions?.length || vals.length) * 5;
         const score = Math.round((sum / maxPossible) * 100);
 
-        // 2. Deterministic Cluster Scoring
-        const clusterTracker = {
-            'Work/Academic Pressure': { sum: 0, count: 0, id: 'Work' },
-            'Emotional Well-being': { sum: 0, count: 0, id: 'Emotional' },
-            'Physical & Sleep Health': { sum: 0, count: 0, id: 'Physical' },
-            'Social & Lifestyle Balance': { sum: 0, count: 0, id: 'Social' }
-        };
+        // 2. Deterministic Cluster Scoring (5 clusters including Lifestyle)
+        const CLUSTER_NAMES = [
+            'Work/Academic Pressure',
+            'Emotional Well-being',
+            'Physical & Sleep Health',
+            'Social & Lifestyle Balance',
+            'Lifestyle & Habits',
+        ];
+
+        const clusterTracker = {};
+        CLUSTER_NAMES.forEach(name => { clusterTracker[name] = { sum: 0, count: 0 }; });
 
         questions.forEach(q => {
             const val = Number(answers[q.id]) || 0;
@@ -80,13 +88,12 @@ exports.analyzeStress = async (req, res, next) => {
             }
         });
 
-        const clusterScores = { Work: 0, Emotional: 0, Physical: 0, Social: 0 };
-        for (const key in clusterTracker) {
-            const { sum, count, id } = clusterTracker[key];
+        // Keys = full cluster names (used by client Results component for CLUSTER_META matching)
+        const clusterScores = {};
+        for (const name of CLUSTER_NAMES) {
+            const { sum, count } = clusterTracker[name];
             if (count > 0) {
-                // Normalize to 0-100 scale (val is 1-5, so (avg / 5) * 100)
-                const avg = sum / count;
-                clusterScores[id] = Math.round((avg / 5) * 100);
+                clusterScores[name] = Math.round((sum / count / 5) * 100);
             }
         }
 
@@ -132,7 +139,7 @@ exports.analyzeStress = async (req, res, next) => {
             };
         }
 
-        // 4. Save to DB (Professional App Feature)
+        // 4. Save to DB
         if (require('mongoose').connection.readyState === 1 && req.user) {
             try {
                 const assessment = await Assessment.create({
@@ -143,7 +150,8 @@ exports.analyzeStress = async (req, res, next) => {
                     clusterScores,
                     level: result.level,
                     analysis: result.analysis,
-                    personalizedTips: result.personalizedTips
+                    personalizedTips: result.personalizedTips,
+                    wellnessPlan: result.wellnessPlan || {}
                 });
                 console.log("Assessment saved:", assessment._id);
             } catch (dbError) {

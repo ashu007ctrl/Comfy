@@ -1,242 +1,222 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, ArrowLeft, Check } from 'lucide-react';
-// import { questions } from '../data/questions'; // REMOVED STATIC IMPORT
+import { ArrowRight, ArrowLeft, Check, Briefcase, Heart, Moon, Users, Leaf, Clock } from 'lucide-react';
 import SEOHelmet from './SEOHelmet';
 import './Questionnaire.css';
+
+// Cluster metadata — color, icon, emoji
+const CLUSTER_META = {
+    "Work/Academic Pressure":   { color: '#a78bfa', bg: 'rgba(167,139,250,0.12)', icon: Briefcase,  emoji: '💼', label: 'Work / Academic' },
+    "Emotional Well-being":     { color: '#f472b6', bg: 'rgba(244,114,182,0.12)', icon: Heart,      emoji: '💙', label: 'Emotional' },
+    "Physical & Sleep Health":  { color: '#38bdf8', bg: 'rgba(56,189,248,0.12)',  icon: Moon,       emoji: '🌙', label: 'Physical & Sleep' },
+    "Social & Lifestyle Balance": { color: '#fbbf24', bg: 'rgba(251,191,36,0.12)', icon: Users,    emoji: '🤝', label: 'Social' },
+    "Lifestyle & Habits":       { color: '#34d399', bg: 'rgba(52,211,153,0.12)',  icon: Leaf,       emoji: '🌿', label: 'Lifestyle' },
+};
+
+const ENCOURAGEMENTS = [
+    "You're doing great — keep going! 🌟",
+    "Each answer helps build a clearer picture 🔍",
+    "Honesty here helps you the most 💪",
+    "Almost there — you're making progress 🚀",
+    "Your well-being matters — thank you for this 💙",
+    "Take a breath, you're doing this for you 🌿",
+    "No right or wrong answers — just your truth ✨",
+    "Every response counts, trust the process 🧠",
+];
+
+const SCALE_LABELS_EN = ['Never', 'Rarely', 'Sometimes', 'Often', 'Very Often'];
+const SCALE_LABELS_HI = ['कभी नहीं', 'शायद ही', 'कभी-कभी', 'अक्सर', 'बहुत अक्सर'];
+const SCALE_EMOJIS = ['😌', '🙂', '😐', '😟', '😰'];
 
 const Questionnaire = ({ questions, language = 'English', onSubmit, onCancel }) => {
     const [currentStep, setCurrentStep] = useState(0);
     const [answers, setAnswers] = useState({});
     const [direction, setDirection] = useState(1);
+    const [encouragement, setEncouragement] = useState(ENCOURAGEMENTS[0]);
+
+    const isHindi = language === 'Hindi';
+    const scaleLabels = isHindi ? SCALE_LABELS_HI : SCALE_LABELS_EN;
+
+    // Rotate encouragement on step change
+    useEffect(() => {
+        setEncouragement(ENCOURAGEMENTS[currentStep % ENCOURAGEMENTS.length]);
+    }, [currentStep]);
 
     if (!questions || questions.length === 0) {
-        return <div className="p-10 text-center">No questions loaded.</div>;
+        return <div style={{ padding: '4rem', textAlign: 'center', color: 'var(--text-secondary)' }}>No questions loaded.</div>;
     }
 
     const currentQuestion = questions[currentStep];
     const progress = ((currentStep + 1) / questions.length) * 100;
     const isLastQuestion = currentStep === questions.length - 1;
+    const totalMins = Math.ceil((questions.length - currentStep - 1) * 0.4);
+    const meta = CLUSTER_META[currentQuestion.cluster] || { color: '#a78bfa', bg: 'rgba(167,139,250,0.1)', emoji: '💡', label: currentQuestion.cluster };
+    const ClusterIcon = meta.icon || Briefcase;
 
-    const handleAnswer = (value) => {
+    const handleAnswer = useCallback((value) => {
         setAnswers(prev => ({ ...prev, [currentQuestion.id]: value }));
-    };
+    }, [currentQuestion.id]);
 
-    const handleNext = () => {
+    const handleNext = useCallback(() => {
         if (answers[currentQuestion.id] === undefined) return;
-
         if (isLastQuestion) {
             onSubmit(answers);
         } else {
             setDirection(1);
             setCurrentStep(prev => prev + 1);
         }
-    };
+    }, [answers, currentQuestion.id, isLastQuestion, onSubmit]);
 
-    const handleBack = () => {
+    const handleBack = useCallback(() => {
         if (currentStep > 0) {
             setDirection(-1);
             setCurrentStep(prev => prev - 1);
         } else {
             onCancel && onCancel();
         }
-    };
+    }, [currentStep, onCancel]);
 
-    const renderInput = () => {
-        // Default to scale if type not specified
-        const type = currentQuestion.type || 'scale';
+    // Keyboard support (1–5 to answer, Enter/→ to advance, ← to go back)
+    useEffect(() => {
+        const handleKey = (e) => {
+            const n = parseInt(e.key);
+            if (n >= 1 && n <= 5) handleAnswer(n);
+            if (e.key === 'Enter' || e.key === 'ArrowRight') handleNext();
+            if (e.key === 'ArrowLeft') handleBack();
+        };
+        window.addEventListener('keydown', handleKey);
+        return () => window.removeEventListener('keydown', handleKey);
+    }, [handleAnswer, handleNext, handleBack]);
 
-        switch (type) {
-            case 'scale':
-                return (
-                    <div className="scale-input-buttons" role="radiogroup">
-                        {[1, 2, 3, 4, 5].map((val) => {
-                            let label = "";
-                            if (language === 'Hindi') {
-                                if (val === 1) label = currentQuestion.minLabel || "कभी नहीं";
-                                if (val === 2) label = "शायद ही कभी";
-                                if (val === 3) label = "कभी-कभी";
-                                if (val === 4) label = "अक्सर";
-                                if (val === 5) label = currentQuestion.maxLabel || "बहुत बार";
-                            } else {
-                                if (val === 1) label = currentQuestion.minLabel || "Never";
-                                if (val === 2) label = "Rarely";
-                                if (val === 3) label = "Sometimes";
-                                if (val === 4) label = "Often";
-                                if (val === 5) label = currentQuestion.maxLabel || "Very Often";
-                            }
+    return (
+        <div className="q-wrapper">
+            <SEOHelmet
+                title="Stress Assessment — Comfy"
+                description="Answer 10 personalized questions to get your AI stress analysis."
+                keywords="stress test, stress assessment, mental health"
+                url="https://mycomfyy.netlify.app/assessment"
+            />
 
-                            const isActive = answers[currentQuestion.id] === val;
+            {/* Background blobs */}
+            <div className="q-bg-blob q-blob-1" style={{ background: `radial-gradient(circle, ${meta.color}33, transparent 70%)` }} />
+            <div className="q-bg-blob q-blob-2" />
+
+            <div className="q-container">
+
+                {/* ── Progress ── */}
+                <div className="q-progress-wrap">
+                    <div className="q-progress-info">
+                        <span className="q-progress-step">Question {currentStep + 1} <span className="q-progress-of">of {questions.length}</span></span>
+                        <div className="q-time-pill">
+                            <Clock size={12} />
+                            {totalMins < 1 ? 'Last one!' : `~${totalMins} min left`}
+                        </div>
+                        <span className="q-progress-pct">{Math.round(progress)}%</span>
+                    </div>
+                    <div className="q-progress-track">
+                        <motion.div
+                            className="q-progress-fill"
+                            style={{ background: `linear-gradient(90deg, ${meta.color}cc, ${meta.color})` }}
+                            initial={{ width: 0 }}
+                            animate={{ width: `${progress}%` }}
+                            transition={{ type: 'spring', stiffness: 80, damping: 20 }}
+                        />
+                    </div>
+
+                    {/* Cluster dots */}
+                    <div className="q-cluster-dots">
+                        {questions.map((q, i) => {
+                            const m = CLUSTER_META[q.cluster] || meta;
                             return (
-                                <motion.button
-                                    key={val}
-                                    role="radio"
-                                    aria-checked={isActive}
-                                    className={`scale-btn ${isActive ? 'active' : ''}`}
-                                    onClick={() => handleAnswer(val)}
-                                    whileHover={{ scale: 1.01, x: 2 }}
-                                    whileTap={{ scale: 0.98 }}
-                                >
-                                    <span className="scale-btn-num">{val}</span>
-                                    <span className="scale-btn-label">{label}</span>
-                                    <span className="scale-btn-val">{val}</span>
-                                </motion.button>
+                                <div
+                                    key={i}
+                                    className={`q-cluster-dot ${i === currentStep ? 'current' : ''} ${answers[q.id] !== undefined ? 'answered' : ''}`}
+                                    style={{ background: i === currentStep ? m.color : answers[q.id] !== undefined ? m.color + '90' : undefined }}
+                                    title={q.cluster}
+                                />
                             );
                         })}
                     </div>
-                );
-            case 'choice':
-                return (
-                    <div className="choice-input" role="radiogroup" aria-label="Select an option">
-                        {currentQuestion.options.map((opt, index) => (
-                            <motion.button
-                                key={opt.text}
-                                role="radio"
-                                aria-checked={answers[currentQuestion.id] === opt.score}
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: index * 0.1 }}
-                                className={`choice-btn ${answers[currentQuestion.id] === opt.score ? 'active' : ''}`}
-                                onClick={() => handleAnswer(opt.score)}
-                                whileHover={{ scale: 1.02, x: 5 }}
-                                whileTap={{ scale: 0.98 }}
-                            >
-                                <span>{opt.text}</span>
-                                {answers[currentQuestion.id] === opt.score && (
-                                    <motion.div
-                                        initial={{ scale: 0 }}
-                                        animate={{ scale: 1 }}
-                                        transition={{ type: "spring", stiffness: 300 }}
+                </div>
+
+                {/* ── Question Card ── */}
+                <AnimatePresence mode="wait" custom={direction}>
+                    <motion.div
+                        key={currentStep}
+                        custom={direction}
+                        initial={{ opacity: 0, x: direction * 60, scale: 0.96 }}
+                        animate={{ opacity: 1, x: 0, scale: 1 }}
+                        exit={{ opacity: 0, x: direction * -60, scale: 0.96 }}
+                        transition={{ duration: 0.38, ease: [0.4, 0, 0.2, 1] }}
+                        className="q-card"
+                        style={{ '--cluster-color': meta.color, '--cluster-bg': meta.bg }}
+                    >
+                        {/* Cluster badge */}
+                        <div className="q-cluster-badge" style={{ background: meta.bg, color: meta.color, borderColor: meta.color + '40' }}>
+                            <ClusterIcon size={14} />
+                            <span>{meta.emoji} {meta.label}</span>
+                        </div>
+
+                        {/* Question text */}
+                        <h2 className="q-question">{currentQuestion.text}</h2>
+
+                        {/* Encouragement */}
+                        <p className="q-encouragement">{encouragement}</p>
+
+                        {/* Answer cards */}
+                        <div className="q-scale-grid" role="radiogroup" aria-label="Rate your answer">
+                            {[1, 2, 3, 4, 5].map((val) => {
+                                const isActive = answers[currentQuestion.id] === val;
+                                return (
+                                    <motion.button
+                                        key={val}
+                                        role="radio"
+                                        aria-checked={isActive}
+                                        className={`q-scale-card ${isActive ? 'active' : ''}`}
+                                        style={isActive ? { borderColor: meta.color, background: meta.bg, boxShadow: `0 0 0 2px ${meta.color}60, 0 8px 24px ${meta.color}30` } : {}}
+                                        onClick={() => handleAnswer(val)}
+                                        whileHover={{ scale: 1.03, y: -3 }}
+                                        whileTap={{ scale: 0.97 }}
+                                        initial={{ opacity: 0, y: 12 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: (val - 1) * 0.06, duration: 0.3 }}
                                     >
-                                        <Check size={20} />
-                                    </motion.div>
-                                )}
+                                        <span className="q-scale-emoji">{SCALE_EMOJIS[val - 1]}</span>
+                                        <span className="q-scale-num" style={isActive ? { color: meta.color } : {}}>{val}</span>
+                                        <span className="q-scale-label">{scaleLabels[val - 1]}</span>
+                                        {isActive && (
+                                            <motion.div className="q-scale-check" initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 300 }}>
+                                                <Check size={12} />
+                                            </motion.div>
+                                        )}
+                                    </motion.button>
+                                );
+                            })}
+                        </div>
+
+                        {/* Keyboard hint */}
+                        <p className="q-keyboard-hint">Press <kbd>1</kbd>–<kbd>5</kbd> to answer · <kbd>→</kbd> to continue</p>
+
+                        {/* Navigation */}
+                        <div className="q-nav">
+                            <motion.button className="q-back-btn" onClick={handleBack} whileHover={{ scale: 1.04, x: -3 }} whileTap={{ scale: 0.96 }}>
+                                <ArrowLeft size={18} /> {currentStep === 0 ? 'Exit' : 'Back'}
                             </motion.button>
-                        ))}
-                    </div>
-                );
-            case 'yesno':
-                return (
-                    <div className="yesno-input" role="radiogroup" aria-label="Yes or No">
-                        <motion.button
-                            role="radio"
-                            aria-checked={answers[currentQuestion.id] === currentQuestion.yesScore}
-                            className={`yesno-btn ${answers[currentQuestion.id] === currentQuestion.yesScore ? 'active' : ''}`}
-                            onClick={() => handleAnswer(currentQuestion.yesScore)}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                        >
-                            Yes
-                        </motion.button>
-                        <motion.button
-                            role="radio"
-                            aria-checked={answers[currentQuestion.id] === currentQuestion.noScore}
-                            className={`yesno-btn ${answers[currentQuestion.id] === currentQuestion.noScore ? 'active' : ''}`}
-                            onClick={() => handleAnswer(currentQuestion.noScore)}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                        >
-                            No
-                        </motion.button>
-                    </div>
-                );
-            default:
-                return null;
-        }
-    };
 
-    return (
-        <div className="questionnaire-wrapper">
-            <SEOHelmet
-                title="Free Stress Assessment Test - Comfy"
-                description="Take our scientifically designed 10-question stress assessment test. Get instant AI-powered analysis and personalized stress management recommendations."
-                keywords="free stress test, stress assessment, stress questionnaire, mental health test, anxiety test, psychological assessment, stress analysis"
-                url="https://mycomfyy.netlify.app/questionnaire"
-            />
-
-            <div className="questionnaire-container">
-                <motion.div
-                    className="questionnaire-content"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                >
-                    {/* Progress Section */}
-                    <div className="progress-section">
-                        <div className="progress-info">
-                            <span className="progress-label">Question {currentStep + 1} of {questions.length}</span>
-                            <span className="progress-percent">{Math.round(progress)}%</span>
+                            <motion.button
+                                className={`q-next-btn ${answers[currentQuestion.id] === undefined ? 'disabled' : ''}`}
+                                style={answers[currentQuestion.id] !== undefined ? { background: `linear-gradient(135deg, ${meta.color}cc, ${meta.color})` } : {}}
+                                onClick={handleNext}
+                                disabled={answers[currentQuestion.id] === undefined}
+                                whileHover={answers[currentQuestion.id] !== undefined ? { scale: 1.04, x: 3 } : {}}
+                                whileTap={answers[currentQuestion.id] !== undefined ? { scale: 0.96 } : {}}
+                            >
+                                {isLastQuestion ? 'Analyze Results' : 'Next'}
+                                <ArrowRight size={18} />
+                            </motion.button>
                         </div>
-                        <div className="progress-bar-container">
-                            <motion.div
-                                className="progress-bar-fill"
-                                initial={{ width: 0 }}
-                                animate={{ width: `${progress}%` }}
-                                transition={{ type: "spring", stiffness: 100, damping: 20 }}
-                            />
-                        </div>
-                    </div>
-
-                    {/* Question Card */}
-                    <AnimatePresence mode='wait' custom={direction}>
-                        <motion.div
-                            key={currentStep}
-                            custom={direction}
-                            initial={{ opacity: 0, x: direction * 50, scale: 0.95 }}
-                            animate={{ opacity: 1, x: 0, scale: 1 }}
-                            exit={{ opacity: 0, x: direction * -50, scale: 0.95 }}
-                            transition={{ duration: 0.4, ease: "easeInOut" }}
-                            className="question-card"
-                        >
-                            <h2 className="question-text">{currentQuestion.text}</h2>
-                            <div className="question-input">
-                                {renderInput()}
-                            </div>
-
-                            {/* Navigation Buttons */}
-                            <div className="navigation-buttons">
-                                <motion.button
-                                    className="back-btn"
-                                    onClick={handleBack}
-                                    whileHover={{ scale: 1.05, x: -5 }}
-                                    whileTap={{ scale: 0.95 }}
-                                >
-                                    <motion.div
-                                        whileHover={{ x: -3 }}
-                                        transition={{ duration: 0.2 }}
-                                    >
-                                        <ArrowLeft size={20} />
-                                    </motion.div>
-                                    <span>Back</span>
-                                </motion.button>
-
-                                <motion.button
-                                    className={`next-btn ${answers[currentQuestion.id] === undefined ? 'disabled' : ''}`}
-                                    onClick={handleNext}
-                                    disabled={answers[currentQuestion.id] === undefined}
-                                    whileHover={answers[currentQuestion.id] !== undefined ? { scale: 1.05, x: 5 } : {}}
-                                    whileTap={answers[currentQuestion.id] !== undefined ? { scale: 0.95 } : {}}
-                                    animate={answers[currentQuestion.id] !== undefined ? {
-                                        boxShadow: [
-                                            "0 10px 30px rgba(124, 58, 237, 0.3)",
-                                            "0 10px 40px rgba(124, 58, 237, 0.5)",
-                                            "0 10px 30px rgba(124, 58, 237, 0.3)"
-                                        ]
-                                    } : {}}
-                                    transition={{ duration: 2, repeat: Infinity }}
-                                >
-                                    <span>{isLastQuestion ? 'Submit & Analyze' : 'Next'}</span>
-                                    <motion.div
-                                        whileHover={{ x: 3 }}
-                                        transition={{ duration: 0.2 }}
-                                    >
-                                        <ArrowRight size={20} />
-                                    </motion.div>
-                                </motion.button>
-                            </div>
-                        </motion.div>
-                    </AnimatePresence>
-                </motion.div>
+                    </motion.div>
+                </AnimatePresence>
             </div>
         </div>
     );

@@ -49,3 +49,32 @@ exports.authorize = (...roles) => {
         next();
     };
 };
+
+/**
+ * Optional auth — attaches req.user if token is valid, but never blocks the request.
+ * Used for routes that are public but should save data for logged-in users.
+ */
+exports.optionalAuth = async (req, res, next) => {
+    let token;
+
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+        token = req.headers.authorization.split(' ')[1];
+    } else if (req.cookies && req.cookies.token) {
+        token = req.cookies.token;
+    }
+
+    if (!token) {
+        req.user = null;
+        return next();
+    }
+
+    try {
+        const secret = process.env.JWT_SECRET || 'fallback_secret_for_dev_only';
+        const decoded = jwt.verify(token, secret);
+        req.user = await User.findById(decoded.id) || null;
+    } catch {
+        req.user = null;
+    }
+
+    next();
+};

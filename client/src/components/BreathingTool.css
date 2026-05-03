@@ -1,0 +1,475 @@
+/* ═══════════════════════════════════════════════════
+   BreathingTool — Redesigned for PC & Mobile
+   ═══════════════════════════════════════════════════ */
+
+.bt-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 9000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    overflow-y: auto;  /* allows scrolling if viewport is very short */
+}
+
+/* ─── Main Panel ─── */
+.bt-panel {
+    background: linear-gradient(145deg, rgba(12, 8, 28, 0.98), rgba(8, 16, 32, 0.98));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 32px;
+    width: 100%;
+    max-width: 860px;
+    max-height: calc(100vh - 2rem);  /* never taller than viewport */
+    overflow-y: auto;                 /* scroll inside if needed */
+    position: relative;
+    box-shadow:
+        0 40px 100px rgba(0, 0, 0, 0.75),
+        0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+}
+
+/* shimmer top line */
+.bt-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 15%; width: 70%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.6), transparent);
+    pointer-events: none;
+}
+
+/* ─── Top bar (header + close) ─── */
+.bt-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 1.6rem 0;
+    position: sticky;   /* stays visible when panel scrolls */
+    top: 0;
+    z-index: 2;
+    background: linear-gradient(145deg, rgba(12, 8, 28, 0.98), rgba(8, 16, 32, 0.98));
+}
+
+.bt-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.bt-header h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: -0.01em;
+}
+
+.bt-close-top {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 18px;
+    border-radius: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.bt-close-top:hover {
+    background: rgba(255, 100, 100, 0.12);
+    border-color: rgba(255, 100, 100, 0.3);
+    color: #fca5a5;
+}
+
+/* ─── Two-column body ─── */
+.bt-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    padding: 1.2rem 1.6rem 1.4rem;
+}
+
+/* ─── LEFT — Circle panel ─── */
+.bt-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Technique tabs */
+.bt-tech-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;  /* 2 columns: Box | 4-7-8 / Deep Belly spans below */
+    gap: 0.4rem;
+    width: 100%;
+}
+
+/* Third button spans full width */
+.bt-tech-btn:nth-child(3) {
+    grid-column: 1 / -1;
+}
+
+.bt-tech-btn {
+    padding: 7px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: inherit;
+}
+
+.bt-tech-btn:hover { background: rgba(255, 255, 255, 0.09); color: rgba(255,255,255,0.8); }
+.bt-tech-btn.active { font-weight: 700; }
+
+/* Animated Circle */
+.bt-circle-wrap {
+    position: relative;
+    width: 240px;
+    height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.bt-glow-ring {
+    position: absolute;
+    inset: -24px;
+    border-radius: 50%;
+    pointer-events: none;
+    transition: background 0.6s ease;
+}
+
+.bt-circle {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border: 3px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.02);
+    position: relative;
+    z-index: 2;
+    transition: border-color 0.6s ease, box-shadow 0.6s ease;
+}
+
+.bt-circle-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.bt-phase-label {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.bt-phase-count {
+    font-size: 3rem;
+    font-weight: 900;
+    color: white;
+    line-height: 1;
+}
+
+.bt-done-emoji { font-size: 2rem; }
+.bt-done-text { font-size: 1.4rem; font-weight: 800; color: white; }
+.bt-done-sub { font-size: 0.85rem; color: rgba(255, 255, 255, 0.45); }
+
+.bt-svg-ring {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Timer row */
+.bt-timer-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.bt-timer {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.85);
+    font-variant-numeric: tabular-nums;
+}
+
+.bt-cycles-badge {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.45);
+    font-weight: 600;
+}
+
+/* Phase chips */
+.bt-phases {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.bt-phase-chip {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.38);
+    background: rgba(255, 255, 255, 0.03);
+    transition: all 0.3s ease;
+}
+
+.bt-phase-chip.active {
+    background: rgba(255, 255, 255, 0.08);
+    font-weight: 700;
+}
+
+.bt-phase-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* ─── RIGHT — Settings & controls ─── */
+.bt-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    justify-content: center;
+}
+
+.bt-section-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+}
+
+/* Description box */
+.bt-desc-box {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 14px;
+    padding: 1rem 1.1rem;
+}
+
+.bt-desc-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 0.3rem;
+}
+
+.bt-desc {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.4);
+    line-height: 1.55;
+}
+
+/* Duration selector */
+.bt-dur-selector {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.bt-dur-btn {
+    flex: 1;
+    padding: 10px 8px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    text-align: center;
+}
+
+.bt-dur-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.09);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.bt-dur-btn.active {
+    background: rgba(255, 255, 255, 0.12);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.28);
+    font-weight: 700;
+}
+
+.bt-dur-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* Phase sequence preview */
+.bt-sequence-preview {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.bt-seq-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    min-width: 54px;
+    transition: all 0.3s ease;
+}
+
+.bt-seq-step.active {
+    border-width: 1px;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.bt-seq-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.35);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.bt-seq-dur {
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.bt-seq-arrow {
+    color: rgba(255, 255, 255, 0.2);
+    font-size: 1rem;
+    line-height: 1;
+    padding-bottom: 12px;
+}
+
+/* Controls */
+.bt-controls {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.bt-reset-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    flex-shrink: 0;
+}
+
+.bt-reset-btn:hover { background: rgba(255, 255, 255, 0.12); color: white; }
+
+.bt-play-btn {
+    flex: 1;
+    padding: 14px 24px;
+    border-radius: 14px;
+    border: none;
+    color: white;
+    font-size: 1.05rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+    transition: box-shadow 0.25s, transform 0.2s;
+}
+
+.bt-play-btn:hover { box-shadow: 0 10px 32px rgba(0, 0, 0, 0.45); transform: translateY(-1px); }
+.bt-play-btn--done { opacity: 0.8; cursor: default; transform: none !important; }
+
+/* ─── Bottom close bar ─── */
+.bt-close-bar {
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.bt-close-bottom {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 28px;
+    border-radius: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.bt-close-bottom:hover {
+    background: rgba(255, 100, 100, 0.1);
+    border-color: rgba(255, 100, 100, 0.25);
+    color: #fca5a5;
+}
+
+/* ─── Mobile: collapse to single column ─── */
+@media (max-width: 700px) {
+    .bt-panel { max-width: 480px; border-radius: 24px; }
+
+    .bt-topbar { padding: 1.3rem 1.4rem 0; }
+
+    .bt-body {
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
+        padding: 1.4rem 1.4rem 1.4rem;
+    }
+
+    .bt-circle-wrap { width: 200px; height: 200px; }
+    .bt-circle { width: 150px; height: 150px; }
+    .bt-phase-count { font-size: 2.4rem; }
+
+    .bt-close-bar { padding: 0.8rem 1.4rem; }
+
+    .bt-right { gap: 1rem; }
+}

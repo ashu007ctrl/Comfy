@@ -22,19 +22,12 @@ function App() {
         .then(() => console.log('Backend pinged to keep alive'))
         .catch(err => console.error('Ping failed', err));
     };
-
-    // Ping immediately on load
     pingBackend();
-
-    // Ping every 5 minutes (300,000 ms)
     const interval = setInterval(pingBackend, 300000);
-
     return () => clearInterval(interval);
   }, [API_URL]);
 
-  const startFlow = () => {
-    navigate('/assessment');
-  };
+  const startFlow = () => navigate('/assessment');
 
   const hideHeaderRoutes = ['/assessment', '/history'];
   const showHeader = !hideHeaderRoutes.some(route => location.pathname.startsWith(route));
@@ -48,10 +41,12 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Protected Routes */}
+        {/* Public — anyone can take the assessment */}
+        <Route path="/assessment" element={<AssessmentFlow />} />
+
+        {/* Protected — login required */}
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/assessment" element={<AssessmentFlow />} />
           <Route path="/history" element={<History onBack={() => navigate('/dashboard')} />} />
         </Route>
       </Routes>

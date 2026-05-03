@@ -22,7 +22,7 @@ const Login = () => {
     };
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', padding: '100px 20px 40px', background: 'transparent' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', minHeight: '100vh', padding: 'clamp(80px, 12vw, 120px) clamp(12px, 4vw, 24px) 40px', background: 'transparent' }}>
             <motion.div
                 initial={{ opacity: 0, y: 20, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -36,7 +36,7 @@ const Login = () => {
                     color: '#ffffff',
                     fontFamily: 'Inter, sans-serif',
                     borderRadius: '32px',
-                    padding: '2.8rem 3.5rem',
+                    padding: 'clamp(1.8rem, 5vw, 2.8rem) clamp(1.4rem, 6vw, 3.5rem)',
                     boxShadow: '0 30px 60px -12px rgba(0,0,0,0.4), 0 0 1px 1px rgba(255,255,255,0.05) inset',
                     position: 'relative',
                     overflow: 'visible'
@@ -111,7 +111,7 @@ const Login = () => {
                         <div style={{ flex: 1, height: '1px', background: 'linear-gradient(to left, transparent, rgba(255,255,255,0.1))' }}></div>
                     </div>
 
-                    <div style={{ display: 'flex', gap: '1rem' }}>
+                    <div className="auth-social-row" style={{ display: 'flex', gap: '1rem' }}>
                         <button
                             className="social-btn"
                             style={{ flex: 1, padding: '14px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.02)', color: 'white', fontSize: '0.95rem', fontWeight: '500', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', transition: 'all 0.2s' }}
@@ -137,9 +137,7 @@ const Login = () => {
                 </div>
             </motion.div>
             <style>{`
-                .auth-input::placeholder {
-                    color: rgba(255, 255, 255, 0.5);
-                }
+                .auth-input::placeholder { color: rgba(255, 255, 255, 0.5); }
                 .auth-input:focus {
                     border-color: var(--primary) !important;
                     background: rgba(0,0,0,0.3) !important;
@@ -148,13 +146,14 @@ const Login = () => {
                     transform: translateY(-2px);
                     box-shadow: 0 12px 20px -4px rgba(109, 40, 217, 0.5), 0 0 0 1px rgba(255,255,255,0.1) inset !important;
                 }
-                .auth-btn:active {
-                    transform: translateY(1px);
-                    box-shadow: 0 4px 8px -2px rgba(109, 40, 217, 0.4), 0 0 0 1px rgba(255,255,255,0.1) inset !important;
-                }
+                .auth-btn:active { transform: translateY(1px); }
                 .social-btn:hover {
                     background: rgba(255,255,255,0.05) !important;
                     border-color: rgba(255,255,255,0.2) !important;
+                }
+                @media (max-width: 480px) {
+                    .auth-social-row { flex-direction: column; }
+                    .auth-social-row .social-btn { width: 100%; }
                 }
             `}</style>
         </div>
