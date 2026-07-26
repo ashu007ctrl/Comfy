@@ -1,0 +1,20 @@
+{
+  "name": "Comfy — AI Stress Analyzer & Mental Wellness Assessment",
+  "short_name": "Comfy",
+  "description": "Free AI-powered stress analyzer and mental wellness assessment tool. Detect burnout, assess stress levels, and get personalized insights.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#7c3aed",
+  "background_color": "#0b0a10",
+  "categories": ["health", "lifestyle", "medical"],
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

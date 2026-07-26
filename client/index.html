@@ -3,41 +3,52 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Primary Meta Tags -->
-  <title>Comfy - AI-Powered Stress Detection & Mental Wellness</title>
-  <meta name="title" content="Comfy - AI-Powered Stress Detection & Mental Wellness" />
+  <title>Comfy | AI Stress Analyzer & Mental Wellness Assessment</title>
+  <meta name="title" content="Comfy | AI Stress Analyzer & Mental Wellness Assessment" />
   <meta name="description"
-    content="Take our free AI-powered stress assessment test and get personalized stress management recommendations. Scientifically designed questionnaire with instant results powered by Google Gemini AI." />
+    content="Comfy is an AI-powered stress analyzer that helps you assess stress levels, detect burnout, and get personalized mental wellness insights — free and instant." />
   <meta name="keywords"
-    content="stress test, mental health, stress detection, AI stress analysis, stress management, mental wellness, anxiety test, stress assessment, psychological assessment, mental health test, stress relief, wellness app" />
+    content="Comfy, AI Stress Analyzer, AI stress detection, stress analysis, mental wellness, AI mental health, online stress test, free AI stress test, stress checker, anxiety assessment, burnout detection, mental health assessment, stress management, personalized wellness, AI mental health tool" />
   <meta name="author" content="Comfy" />
-  <meta name="robots" content="index, follow" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="language" content="English" />
-  <meta name="revisit-after" content="7 days" />
+  <meta name="revisit-after" content="3 days" />
+  <meta name="rating" content="general" />
 
   <!-- Canonical URL -->
-  <link rel="canonical" href="https://yourwebsite.com/" />
+  <link rel="canonical" href="https://aistressanalyzer.netlify.app/" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <link rel="apple-touch-icon" href="/vite.svg" />
+
+  <!-- Manifest (PWA) -->
+  <link rel="manifest" href="/manifest.json" />
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://yourwebsite.com/" />
-  <meta property="og:title" content="Comfy - AI-Powered Stress Detection & Mental Wellness" />
+  <meta property="og:url" content="https://aistressanalyzer.netlify.app/" />
+  <meta property="og:title" content="Comfy | AI Stress Analyzer & Mental Wellness" />
   <meta property="og:description"
-    content="Take our free AI-powered stress assessment test and get personalized stress management recommendations. Scientifically designed questionnaire with instant results." />
-  <meta property="og:image" content="https://yourwebsite.com/og-image.png" />
+    content="Comfy is an AI-powered stress analyzer — assess your stress levels, detect burnout, and get personalized wellness insights for free." />
+  <meta property="og:image" content="https://aistressanalyzer.netlify.app/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Comfy — AI Stress Analyzer and Mental Wellness Assessment Tool" />
   <meta property="og:site_name" content="Comfy" />
   <meta property="og:locale" content="en_US" />
 
   <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://yourwebsite.com/" />
-  <meta property="twitter:title" content="Comfy - AI-Powered Stress Detection & Mental Wellness" />
-  <meta property="twitter:description"
-    content="Take our free AI-powered stress assessment test and get personalized stress management recommendations. Scientifically designed questionnaire with instant results." />
-  <meta property="twitter:image" content="https://yourwebsite.com/twitter-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://aistressanalyzer.netlify.app/" />
+  <meta name="twitter:title" content="Comfy | AI Stress Analyzer & Mental Wellness" />
+  <meta name="twitter:description"
+    content="Free AI-powered stress assessment with personalized mental wellness insights. Try Comfy now." />
+  <meta name="twitter:image" content="https://aistressanalyzer.netlify.app/og-image.png" />
+  <meta name="twitter:image:alt" content="Comfy — AI Stress Analyzer" />
 
   <!-- Mobile Optimization -->
   <meta name="theme-color" content="#7c3aed" />
@@ -47,49 +58,232 @@
   <meta name="apple-mobile-web-app-title" content="Comfy" />
   <meta name="format-detection" content="telephone=no" />
 
-  <!-- JSON-LD Structured Data -->
+  <!-- Preconnect to external domains for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="dns-prefetch" href="https://comfy-o2ia.onrender.com" />
+
+  <!-- JSON-LD: WebSite with SearchAction -->
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "WebApplication",
+      "@type": "WebSite",
       "name": "Comfy",
-      "description": "AI-powered stress detection and mental wellness application providing free stress assessments and personalized recommendations.",
-      "url": "https://yourwebsite.com",
+      "alternateName": ["AI Stress Analyzer", "Comfy AI Stress Analyzer"],
+      "url": "https://aistressanalyzer.netlify.app",
+      "description": "Comfy is an AI-powered stress analyzer that helps users assess stress levels and receive personalized mental wellness insights.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://aistressanalyzer.netlify.app/?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+  </script>
+
+  <!-- JSON-LD: WebApplication / SoftwareApplication -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": ["WebApplication", "SoftwareApplication"],
+      "name": "Comfy",
+      "alternateName": "AI Stress Analyzer",
+      "description": "Comfy is an AI-powered stress analyzer and mental wellness assessment tool. Take a free online stress test, detect burnout, and get personalized recommendations powered by Google Gemini AI.",
+      "url": "https://aistressanalyzer.netlify.app",
       "applicationCategory": "HealthApplication",
+      "applicationSubCategory": "Mental Health",
       "operatingSystem": "Web",
+      "browserRequirements": "Requires a modern web browser with JavaScript enabled",
       "offers": {
         "@type": "Offer",
         "price": "0",
-        "priceCurrency": "USD"
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
       },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "1250"
+      "featureList": [
+        "AI-powered stress analysis",
+        "Personalized wellness insights",
+        "Burnout detection",
+        "Free online stress test",
+        "Guided breathing exercises",
+        "Stress history tracking",
+        "Google Gemini AI integration"
+      ],
+      "screenshot": "https://aistressanalyzer.netlify.app/og-image.png",
+      "softwareVersion": "1.0",
+      "creator": {
+        "@type": "Organization",
+        "name": "Comfy"
       }
     }
-    </script>
+  </script>
 
+  <!-- JSON-LD: Organization -->
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "Comfy",
-      "description": "Mental wellness platform providing AI-powered stress detection and management solutions.",
-      "url": "https://yourwebsite.com",
-      "logo": "https://yourwebsite.com/logo.png",
+      "alternateName": "AI Stress Analyzer",
+      "description": "Comfy is a mental wellness platform providing AI-powered stress detection, analysis, and personalized management solutions.",
+      "url": "https://aistressanalyzer.netlify.app",
+      "logo": "https://aistressanalyzer.netlify.app/vite.svg",
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "Customer Support",
-        "url": "https://yourwebsite.com/#contact"
-      },
-      "sameAs": [
-        "https://twitter.com/comfy",
-        "https://facebook.com/comfy",
-        "https://linkedin.com/company/comfy"
+        "url": "https://aistressanalyzer.netlify.app/#contact",
+        "availableLanguage": "English"
+      }
+    }
+  </script>
+
+  <!-- JSON-LD: FAQPage -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is Comfy?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Comfy is a free AI-powered stress analyzer that helps you assess your stress levels, detect burnout, and receive personalized mental wellness insights. It uses Google Gemini AI to analyze your responses and provide actionable recommendations."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does the AI stress analysis work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Comfy's AI stress analyzer uses a scientifically designed questionnaire combined with Google Gemini AI to evaluate your emotional, physical, and psychological stress indicators. It analyzes patterns in your responses to provide a comprehensive stress score and personalized recommendations."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Comfy's stress test free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, Comfy is completely free to use. You can take the AI stress assessment, view your results, and receive personalized wellness recommendations without any cost or subscription."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How accurate is the AI stress detection?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Comfy uses advanced AI models powered by Google Gemini to provide highly accurate stress analysis. The assessment is based on validated psychological frameworks and continuously improved through AI learning. However, it is not a substitute for professional medical advice."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my data private and secure?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Absolutely. Comfy takes privacy seriously. Your assessment data is encrypted and processed securely. We never share your personal information or stress analysis results with third parties."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How long does the stress test take?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The Comfy AI stress assessment takes approximately 5 minutes to complete. You'll receive your detailed stress score and personalized recommendations immediately after finishing the test."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I track my stress levels over time?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. When you create a free account on Comfy, you can access your stress history dashboard, track changes in your stress levels over time, and monitor the effectiveness of recommended wellness strategies."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What kind of personalized recommendations does Comfy provide?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Based on your stress analysis, Comfy provides tailored recommendations including breathing exercises, lifestyle adjustments, mindfulness techniques, sleep hygiene tips, and stress management strategies specific to your stress triggers."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Comfy replace professional therapy or counseling?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Comfy is designed as a self-assessment and awareness tool. While it provides valuable stress insights and wellness recommendations, it is not a replacement for professional mental health care. If you're experiencing severe stress or mental health issues, please consult a licensed professional."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What technologies power Comfy's stress analysis?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Comfy is powered by Google Gemini AI for intelligent stress analysis, built on modern web technologies including React for the frontend, and uses secure cloud infrastructure for data processing and storage."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can Comfy detect burnout?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Comfy's AI stress analyzer is designed to identify signs of burnout alongside general stress levels. The assessment evaluates factors like emotional exhaustion, reduced productivity, and chronic fatigue to help detect burnout early."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Comfy suitable for students and college stress?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Absolutely. Comfy is designed for everyone, including students dealing with academic pressure, exam stress, and college-related anxiety. The AI tailors its recommendations specifically to your age group and stress triggers."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need to create an account to use Comfy?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. You can take the AI stress test without creating an account. However, creating a free account allows you to save your results, track your stress history, and access your personalized dashboard."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the breathing exercise tool in Comfy?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Comfy includes a guided breathing exercise tool with multiple techniques including Box Breathing, 4-7-8 breathing, and deep relaxation methods. These are scientifically proven techniques to reduce stress and anxiety in minutes."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is Comfy different from other stress tests online?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Unlike basic online stress questionnaires, Comfy uses advanced AI powered by Google Gemini to provide deeply personalized analysis. It doesn't just give you a score — it explains your stress patterns, identifies triggers, and provides actionable, customized wellness recommendations."
+          }
+        }
       ]
     }
-    </script>
+  </script>
+
+  <!-- JSON-LD: BreadcrumbList -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://aistressanalyzer.netlify.app/"
+        }
+      ]
+    }
+  </script>
 </head>
 
 <body>

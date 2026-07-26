@@ -26,21 +26,22 @@ const Hero = ({ onStart }) => {
                         <div className="hero-badge">
                             <img
                                 src={geminiLogo}
-                                alt="Gemini AI"
+                                alt="Google Gemini AI logo powering Comfy stress analysis"
                                 className="gemini-logo"
                             />
                             AI-Powered by Gemini
                         </div>
 
-                        {/* Main Title */}
+                        {/* Main Title — SEO H1 with brand + primary keyword */}
                         <h1 className="hero-title">
-                            Understand Your Stress, Improve Your Life
+                            Comfy – AI Stress Analyzer
                         </h1>
 
-                        {/* Subtitle */}
+                        {/* Subtitle with natural keyword inclusion */}
                         <p className="hero-subtitle">
-                            Get personalized insights with our advanced AI stress assessment.
-                            Discover your stress levels and receive actionable tips in minutes.
+                            Analyze your stress levels with AI-powered precision. Get personalized
+                            mental wellness insights, detect burnout early, and take a free online
+                            stress test — all in under 5 minutes.
                         </p>
 
                         {/* CTA Buttons */}
@@ -50,6 +51,7 @@ const Hero = ({ onStart }) => {
                                 onClick={onStart}
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
+                                aria-label="Start free AI stress test"
                             >
                                 Start Free Test
                                 <ArrowRight size={20} />
@@ -59,6 +61,7 @@ const Hero = ({ onStart }) => {
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                                 onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
+                                aria-label="Learn more about Comfy AI stress analysis"
                             >
                                 Learn More
                             </motion.button>
@@ -87,16 +90,19 @@ const Hero = ({ onStart }) => {
                     </motion.div>
                 </div>
 
-                {/* Right Image */}
+                {/* Right Image — SEO-optimized alt text */}
                 <div className="hero-image-wrapper">
                     <div className="hero-image-bg"></div>
                     <motion.img
                         src={heroImage}
-                        alt="Meditation Illustration"
+                        alt="Comfy AI Stress Analyzer — meditation and mental wellness illustration"
                         className="hero-image"
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 1, delay: 0.2 }}
+                        loading="eager"
+                        width="500"
+                        height="500"
                     />
                 </div>
             </div>

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Hero from '../components/Hero';
 import About from '../components/About';
+import SEOContent from '../components/SEOContent';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
 import SEOHelmet from '../components/SEOHelmet';
@@ -39,10 +40,10 @@ const Home = ({ onStart }) => {
             variants={containerVariants}
         >
             <SEOHelmet
-                title="Comfy - AI-Powered Stress Detection & Mental Wellness"
-                description="Take our free AI-powered stress assessment test and get personalized stress management recommendations. Scientifically designed questionnaire with instant results powered by Google Gemini AI."
-                keywords="stress test, mental health, stress detection, AI stress analysis, stress management, mental wellness, free stress test, anxiety assessment, mental health assessment"
-                url="https://mycomfyy.netlify.app/"
+                title="Comfy | AI Stress Analyzer & Mental Wellness Assessment"
+                description="Comfy is an AI-powered stress analyzer that helps you assess stress levels, detect burnout, and get personalized mental wellness insights — free and instant."
+                keywords="Comfy, AI Stress Analyzer, AI stress detection, stress analysis, mental wellness, AI mental health, online stress test, free AI stress test, anxiety assessment, burnout detection, stress management, mental health assessment"
+                url="https://aistressanalyzer.netlify.app/"
             />
             <motion.section id="home" variants={sectionVariants}>
                 <Hero onStart={onStart} />
@@ -50,6 +51,10 @@ const Home = ({ onStart }) => {
 
             <motion.div variants={sectionVariants}>
                 <About />
+            </motion.div>
+
+            <motion.div variants={sectionVariants}>
+                <SEOContent onStart={onStart} />
             </motion.div>
 
             <motion.div variants={sectionVariants}>

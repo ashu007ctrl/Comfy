@@ -1,8 +1,10 @@
+# Comfy — AI Stress Analyzer
+# https://aistressanalyzer.netlify.app
+
 User-agent: *
 Allow: /
+Disallow: /dashboard
+Disallow: /history
 
-# Sitemap location
-Sitemap: https://yourwebsite.com/sitemap.xml
-
-# Crawl-delay (optional, helps prevent server overload)
-Crawl-delay: 1
+# Sitemap
+Sitemap: https://aistressanalyzer.netlify.app/sitemap.xml

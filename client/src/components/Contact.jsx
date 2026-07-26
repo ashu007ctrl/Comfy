@@ -72,9 +72,9 @@ const Contact = () => {
                     ) : (
                         <>
                             <div className="contact-header">
-                                <h2 className="contact-title">Get in Touch</h2>
+                                <h2 className="contact-title">Get in Touch with Comfy</h2>
                                 <p className="contact-description">
-                                    Have questions or feedback? We'd love to hear from you.
+                                    Have questions about our AI stress analyzer, feedback on your assessment, or suggestions for improving your experience? We'd love to hear from you.
                                 </p>
                             </div>
 

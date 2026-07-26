@@ -8,17 +8,17 @@ const About = () => {
         {
             icon: Heart,
             title: 'Personalized Care',
-            text: 'Tailored insights and recommendations based on your unique stress profile and responses.'
+            text: 'Tailored stress insights and wellness recommendations based on your unique stress profile, lifestyle, and emotional responses.'
         },
         {
             icon: ShieldCheck,
-            title: '100% Private',
-            text: 'Your data is encrypted and processed securely. We never share your information.'
+            title: '100% Private & Secure',
+            text: 'Your stress assessment data is encrypted and processed securely. Comfy never shares your personal information with third parties.'
         },
         {
             icon: Zap,
-            title: 'Instant Results',
-            text: 'Get your detailed stress score and actionable tips immediately after completing the test.'
+            title: 'Instant AI Results',
+            text: 'Receive your detailed AI stress analysis score and actionable mental wellness tips immediately after completing the assessment.'
         }
     ];
 
@@ -61,12 +61,13 @@ const About = () => {
                     viewport={{ once: true }}
                     transition={{ duration: 0.6 }}
                 >
-                    <div className="about-badge">Why Choose Us</div>
-                    <h2 className="about-title">Advanced AI-Powered Stress Detection</h2>
+                    <div className="about-badge">Why Choose Comfy</div>
+                    <h2 className="about-title">How Comfy's AI Stress Analysis Works</h2>
                     <p className="about-description">
-                        Comfy uses cutting-edge artificial intelligence to analyze your responses and provide
-                        accurate stress assessments. Our mission is to make mental health tracking simple,
-                        private, and accessible to everyone.
+                        Comfy uses advanced artificial intelligence to analyze your responses and deliver
+                        accurate stress detection results. Whether you're dealing with work stress, academic
+                        pressure, or everyday anxiety, our AI stress analyzer provides personalized insights
+                        to help you understand and manage your mental wellness effectively.
                     </p>
                 </motion.div>
 
