@@ -2,7 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import './Hero.css';
-import heroImage from '../assets/hero-meditation.png';
+import heroImageWebp from '../assets/hero-meditation.webp';
+import heroImagePng from '../assets/hero-meditation.png';
 import geminiLogo from '../assets/gemini-logo11.png';
 
 const Hero = ({ onStart }) => {
@@ -90,20 +91,24 @@ const Hero = ({ onStart }) => {
                     </motion.div>
                 </div>
 
-                {/* Right Image — SEO-optimized alt text */}
+                {/* Right Image — WebP with PNG fallback, SEO-optimized alt text */}
                 <div className="hero-image-wrapper">
                     <div className="hero-image-bg"></div>
-                    <motion.img
-                        src={heroImage}
-                        alt="Comfy AI Stress Analyzer — meditation and mental wellness illustration"
-                        className="hero-image"
+                    <motion.picture
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 1, delay: 0.2 }}
-                        loading="eager"
-                        width="500"
-                        height="500"
-                    />
+                    >
+                        <source srcSet={heroImageWebp} type="image/webp" />
+                        <img
+                            src={heroImagePng}
+                            alt="Comfy AI Stress Analyzer — meditation and mental wellness illustration"
+                            className="hero-image"
+                            loading="eager"
+                            width="500"
+                            height="500"
+                        />
+                    </motion.picture>
                 </div>
             </div>
 
