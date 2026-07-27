@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6d28d9"/>
+      <stop offset="50%" style="stop-color:#7c3aed"/>
+      <stop offset="100%" style="stop-color:#a78bfa"/>
+    </linearGradient>
+    <linearGradient id="letter" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff"/>
+      <stop offset="100%" style="stop-color:#e9d5ff"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Rounded square background -->
+  <rect width="512" height="512" rx="96" ry="96" fill="url(#bg)"/>
+  <!-- Subtle inner glow -->
+  <rect width="512" height="512" rx="96" ry="96" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
+  <!-- Stylized "C" with a zen wave/lotus feel -->
+  <g filter="url(#glow)" transform="translate(256,256)">
+    <!-- Main C arc -->
+    <path d="M 60,-120 A 150,150 0 1,0 60,120" 
+          fill="none" stroke="url(#letter)" stroke-width="48" stroke-linecap="round"/>
+    <!-- Small calming wave accent at the opening -->
+    <path d="M 68,-90 Q 100,-60 68,-30 Q 36,0 68,30 Q 100,60 68,90" 
+          fill="none" stroke="url(#letter)" stroke-width="16" stroke-linecap="round" opacity="0.5"/>
+    <!-- Small dot for AI accent -->
+    <circle cx="110" cy="0" r="14" fill="url(#letter)" opacity="0.7"/>
+  </g>
+</svg>
