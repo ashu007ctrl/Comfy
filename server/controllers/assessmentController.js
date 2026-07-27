@@ -112,13 +112,13 @@ exports.analyzeStress = async (req, res, next) => {
             const fallbackTipPool = isHindi ? [
                 { title: "5-4-3-2-1 तकनीक अपनाएं", description: "जब तनाव महसूस हो, तो 5 चीजें पहचानें जो आप देख सकते हैं, 4 जिन्हें छू सकते हैं, 3 जिन्हें सुन सकते हैं, 2 जिन्हें सूंघ सकते हैं, और 1 जिसका स्वाद ले सकते हैं।" },
                 { title: "छोटे ब्रेक लें", description: `एक ${occupation} के रूप में, हर 90 मिनट में 5 मिनट का ब्रेक लें। अपनी जगह से उठें और स्क्रीन से दूर देखें।` },
-                { title: "गहरी सांस लें", description: "4 सेकंड के लिए सांस लें, 4 सेकंड रोकें, 4 सेकंड छोड़ें। इसे 4 बार दोहराएं। यह आपके तंत्रिका तंत्र को शांत करता है।" },
+
                 { title: "सोने से पहले स्क्रीन बंद करें", description: "सोने से 1 घंटे पहले स्क्रीन से दूर रहें। किताबें पढ़ें या हल्का स्ट्रेचिंग करें।" },
                 { title: "निर्णय लेने का तनाव कम करें", description: `एक ${occupation} के रूप में आप रोजाना कई निर्णय लेते हैं। छोटे विकल्पों (जैसे खाना, कपड़े) को सरल बनाएं ताकि मानसिक ऊर्जा बच सके।` },
             ] : [
                 { title: "Try the 5-4-3-2-1 Grounding Technique", description: "When overwhelmed, name 5 things you see, 4 you can touch, 3 you hear, 2 you smell, and 1 you taste. This anchors you to the present moment." },
                 { title: "Schedule Micro-Breaks", description: `As a ${occupation}, build in 5-minute breaks every 90 minutes. Stand up, stretch, and look away from screens. Small resets prevent burnout.` },
-                { title: "Practice Box Breathing", description: "Inhale for 4 seconds, hold for 4, exhale for 4, hold for 4. Repeat 4 times. This activates your parasympathetic nervous system." },
+
                 { title: "Set a Wind-Down Alarm", description: "Set an alarm 1 hour before bed to start disconnecting from work and screens. Use this time for light reading or gentle stretching." },
                 { title: "Limit Decision Fatigue", description: `In ${occupation}, you make many decisions daily. Simplify low-stakes choices (meals, outfits) to save mental energy for what matters.` },
             ];

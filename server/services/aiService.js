@@ -348,7 +348,7 @@ exports.analyzeStress = async (userInfo, answers, questions, score) => {
     // Banned themes rotate each session — forces AI away from its default tip clusters
     const BAN_POOLS = [
         ["Pomodoro", "time blocking", "to-do list", "scheduling tasks"],
-        ["meditation", "mindfulness", "body scan", "deep breathing exercises"],
+        ["meditation", "mindfulness", "body scan"],
         ["journaling", "gratitude list", "writing feelings", "reflection diary"],
         ["sleep schedule", "bedtime routine", "digital sunset", "no-screens rule"],
         ["gym", "exercise routine", "daily walk", "stretching routine"],
@@ -357,7 +357,7 @@ exports.analyzeStress = async (userInfo, answers, questions, score) => {
     const bannedThemes = shuffledBans.slice(0, 2).flat();
 
     const ALL_TECHNIQUES = [
-        "Box Breathing (4-4-4-4)", "4-7-8 Breathing", "5-Minute Journaling",
+        "5-Minute Journaling",
         "Pomodoro Technique (25-5 blocks)", "Digital Sunset (no screens 1h before bed)",
         "Progressive Muscle Relaxation", "Cold Water Face Reset",
         "2-Minute Desk Stretch Routine", "15-Minute Nature Walk", "Gratitude Log (3 items nightly)",

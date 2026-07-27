@@ -4,7 +4,6 @@ import { RefreshCcw, CheckCircle, AlertTriangle, AlertOctagon, Info, Lightbulb, 
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import SEOHelmet from './SEOHelmet';
-import BreathingTool from './BreathingTool';
 import './Results.css';
 
 const CLUSTER_META = {
@@ -46,7 +45,6 @@ const buildClusterScores = (questions = [], answers = {}) => {
 
 const Results = ({ result, onRetake, questions, answers }) => {
     const { user } = useAuth();
-    const [showBreathing, setShowBreathing] = useState(false);
     const [copied, setCopied] = useState(false);
     const [tipsExpanded, setTipsExpanded] = useState(false);
 
@@ -149,9 +147,6 @@ const Results = ({ result, onRetake, questions, answers }) => {
 
                     {/* Action row */}
                     <div className="res-action-row">
-                        <motion.button className="res-breath-btn" onClick={() => setShowBreathing(true)} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                            <Wind size={16} /> Try Breathing Exercise
-                        </motion.button>
                         <motion.button className="res-share-btn" onClick={handleShare} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                             {copied ? <><Check size={15} /> Copied!</> : <><Share2 size={15} /> Share Results</>}
                         </motion.button>
@@ -243,11 +238,6 @@ const Results = ({ result, onRetake, questions, answers }) => {
                                 <div className="res-technique-label">🎯 Recommended Technique</div>
                                 <div className="res-technique-name">{techniqueRecommended}</div>
                                 {reasonForTechnique && <div className="res-technique-reason">{reasonForTechnique}</div>}
-                                {techniqueRecommended.toLowerCase().includes('breath') && (
-                                    <button className="res-try-breath-btn" onClick={() => setShowBreathing(true)}>
-                                        <Wind size={14} /> Try it now →
-                                    </button>
-                                )}
                             </div>
                         )}
                     </motion.div>
@@ -288,10 +278,6 @@ const Results = ({ result, onRetake, questions, answers }) => {
                 <p className="res-disclaimer">{disclaimer}</p>
             </div>
 
-            {/* Breathing Modal */}
-            <AnimatePresence>
-                {showBreathing && <BreathingTool onClose={() => setShowBreathing(false)} />}
-            </AnimatePresence>
         </div>
     );
 };

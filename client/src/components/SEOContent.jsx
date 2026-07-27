@@ -112,7 +112,7 @@ const SEOContent = ({ onStart }) => {
                                     <h3>Get Personalized Insights</h3>
                                     <p>
                                         Receive a comprehensive stress score along with detailed, personalized
-                                        recommendations including breathing techniques, lifestyle adjustments,
+                                        recommendations including lifestyle adjustments,
                                         mindfulness strategies, and targeted tips to help you improve your mental
                                         wellness over time.
                                     </p>
@@ -159,13 +159,7 @@ const SEOContent = ({ onStart }) => {
                                     <p>Track your stress levels over time with a personal dashboard that visualizes trends and helps you see what's working.</p>
                                 </div>
                             </div>
-                            <div className="seo-feature-item">
-                                <Lightbulb size={20} className="seo-feature-icon" />
-                                <div>
-                                    <strong>Guided Breathing Exercises</strong>
-                                    <p>Access Box Breathing, 4-7-8 technique, and deep relaxation exercises — proven methods to reduce stress and anxiety instantly.</p>
-                                </div>
-                            </div>
+
                         </div>
                     </motion.div>
                 </motion.div>

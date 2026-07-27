@@ -6,7 +6,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Wind, Zap, TrendingUp, Calendar, Star, ChevronRight } from 'lucide-react';
 import Footer from '../components/Footer';
 import Results from '../components/Results';
-import BreathingTool from '../components/BreathingTool';
 import './Dashboard.css';
 
 // ── Daily Wellness Tips (rotates by day-of-year) ──
@@ -70,7 +69,6 @@ const Dashboard = () => {
     const [trends, setTrends] = useState(null);
     const [loading, setLoading] = useState(true);
     const [selectedHistory, setSelectedHistory] = useState(null);
-    const [showBreathing, setShowBreathing] = useState(false);
 
     const dailyTip = getDailyTip();
     const dailyQuote = getDailyQuote();
@@ -208,27 +206,6 @@ const Dashboard = () => {
                             <p className="db-tip-text">{dailyTip.tip}</p>
                         </motion.div>
 
-                        {/* ── Breathing Tool Quick Launch ── */}
-                        <motion.div
-                            className="db-card db-breath-card"
-                            whileHover={{ scale: 1.02 }}
-                            initial={{ opacity: 0, y: 16 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 }}
-                        >
-                            <div className="db-card-label"><Wind size={14} /> Breathing Exercise</div>
-                            <div className="db-breath-visual">
-                                <motion.div
-                                    className="db-breath-circle"
-                                    animate={{ scale: [1, 1.18, 1] }}
-                                    transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                                />
-                            </div>
-                            <p className="db-breath-desc">Reduce stress in 60 seconds with guided breathing</p>
-                            <button className="db-breath-btn" onClick={() => setShowBreathing(true)}>
-                                Start Session <ChevronRight size={16} />
-                            </button>
-                        </motion.div>
 
                         {/* ── Last Assessment Cluster Breakdown ── */}
                         {Object.keys(lastClusterScores).length > 0 && (
@@ -333,10 +310,6 @@ const Dashboard = () => {
             </div>
             <Footer />
 
-            {/* Breathing Tool Modal */}
-            <AnimatePresence>
-                {showBreathing && <BreathingTool onClose={() => setShowBreathing(false)} />}
-            </AnimatePresence>
         </>
     );
 };
