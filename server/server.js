@@ -21,6 +21,7 @@ app.use(cors({
     origin: [
         process.env.CLIENT_URL,
         'https://mycomfyy.netlify.app',
+        'https://aistressanalyzer.netlify.app',
         'http://localhost:5173'
     ].filter(Boolean),
     credentials: true, // Allow sending cookies
