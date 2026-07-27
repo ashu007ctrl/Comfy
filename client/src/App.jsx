@@ -5,6 +5,9 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import AboutPage from './pages/AboutPage';
+import ContactPage from './pages/ContactPage';
+import TermsPage from './pages/TermsPage';
 import AssessmentFlow from './components/AssessmentFlow';
 import History from './components/History';
 import Header from './components/Header';
@@ -29,7 +32,7 @@ function App() {
 
   const startFlow = () => navigate('/assessment');
 
-  const hideHeaderRoutes = ['/assessment', '/history'];
+  const hideHeaderRoutes = ['/assessment', '/history', '/about', '/contact', '/terms'];
   const showHeader = !hideHeaderRoutes.some(route => location.pathname.startsWith(route));
 
   return (
@@ -40,6 +43,9 @@ function App() {
         <Route path="/" element={<Home onStart={startFlow} />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/terms" element={<TermsPage />} />
 
         {/* Public — anyone can take the assessment */}
         <Route path="/assessment" element={<AssessmentFlow />} />

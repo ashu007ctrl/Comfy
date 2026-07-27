@@ -1,201 +1,245 @@
 /* ═══════════════════════════════════════════
-   Questionnaire — Premium Redesign
+   Questionnaire — Modern Card UI
    ═══════════════════════════════════════════ */
 
 .q-wrapper {
-    min-height: 100vh;
-    padding-top: 90px;
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
     position: relative;
     overflow: hidden;
-    background: var(--gradient-bg);
 }
 
-/* background blobs */
+/* ── Background blobs ── */
 .q-bg-blob {
     position: absolute;
     border-radius: 50%;
     filter: blur(100px);
+    opacity: 0.3;
     pointer-events: none;
     z-index: 0;
-    transition: background 0.6s ease;
 }
-
 .q-blob-1 {
-    width: 500px; height: 500px;
-    top: -100px; right: -100px;
-    opacity: 0.25;
-    animation: qBlobFloat 14s ease-in-out infinite;
+    width: 400px; height: 400px;
+    top: -120px; right: -100px;
+    animation: q-float 10s ease-in-out infinite;
 }
-
 .q-blob-2 {
-    width: 380px; height: 380px;
-    bottom: -80px; left: -60px;
-    background: radial-gradient(circle, rgba(56,189,248,0.2), transparent 70%);
-    opacity: 0.2;
-    animation: qBlobFloat 10s ease-in-out infinite reverse;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(244, 114, 182, 0.3), transparent 70%);
+    bottom: -80px; left: -80px;
+    animation: q-float 12s ease-in-out infinite reverse;
 }
-
-@keyframes qBlobFloat {
-    0%, 100% { transform: translate(0,0) scale(1); }
-    50% { transform: translate(24px,-20px) scale(1.05); }
+@keyframes q-float {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-25px) scale(1.04); }
 }
 
 .q-container {
-    max-width: 780px;
-    margin: 0 auto;
-    padding: 2rem 1.5rem 5rem;
     position: relative;
     z-index: 1;
+    width: 100%;
+    max-width: 660px;
 }
 
-/* ─── Progress ─── */
-.q-progress-wrap { margin-bottom: 2rem; }
-
-.q-progress-info {
+/* ═══ Progress Header ═══ */
+.q-progress-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.75rem;
-    gap: 0.5rem;
+    justify-content: space-between;
+    margin-bottom: 0.8rem;
+    padding: 0 0.25rem;
+}
+.q-progress-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.q-progress-right {
+    display: flex;
+    align-items: center;
 }
 
-.q-progress-step {
-    font-size: 0.95rem;
+/* ── Circular Progress ── */
+.q-progress-circle {
+    position: relative;
+    width: 48px; height: 48px;
+    flex-shrink: 0;
+}
+.q-progress-svg {
+    width: 100%; height: 100%;
+    transform: rotate(-90deg);
+}
+.q-progress-bg-ring {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.06);
+    stroke-width: 3.5;
+}
+.q-progress-fill-ring {
+    fill: none;
+    stroke-width: 3.5;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.q-progress-number {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
     font-weight: 700;
-    color: rgba(255,255,255,0.85);
+    color: #fff;
 }
 
+/* ── Step text ── */
+.q-progress-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+.q-progress-step {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #fff;
+}
 .q-progress-of {
     font-weight: 400;
-    color: rgba(255,255,255,0.4);
+    color: rgba(255, 255, 255, 0.4);
 }
 
+/* ── AI tag ── */
+.q-ai-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #a78bfa;
+    letter-spacing: 0.03em;
+}
+.q-ai-tag svg {
+    color: #a78bfa;
+}
+
+/* ── Time pill ── */
 .q-time-pill {
     display: flex;
     align-items: center;
     gap: 5px;
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: rgba(255,255,255,0.45);
-    background: rgba(255,255,255,0.06);
-    padding: 4px 10px;
-    border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.08);
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.q-progress-pct {
-    font-size: 1rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, #fff, var(--primary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    min-width: 40px;
-    text-align: right;
-}
-
+/* ═══ Linear Progress Bar ═══ */
 .q-progress-track {
-    height: 6px;
-    background: rgba(255,255,255,0.08);
-    border-radius: 6px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
     overflow: hidden;
-    margin-bottom: 0.65rem;
+    margin-bottom: 0.6rem;
 }
-
 .q-progress-fill {
     height: 100%;
-    border-radius: 6px;
-    box-shadow: 0 0 12px currentColor;
-    transition: background 0.4s ease;
+    border-radius: 4px;
+    position: relative;
+}
+.q-progress-fill::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 30px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
+    border-radius: 4px;
 }
 
-/* cluster dots */
+/* ═══ Cluster Dots ═══ */
 .q-cluster-dots {
     display: flex;
-    gap: 4px;
     justify-content: center;
-    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 1.2rem;
 }
-
 .q-cluster-dot {
     width: 8px; height: 8px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
 }
-
 .q-cluster-dot.current {
-    transform: scale(1.4);
+    width: 22px;
+    border-radius: 10px;
+    box-shadow: 0 0 12px currentColor;
 }
-
 .q-cluster-dot.answered {
-    opacity: 0.7;
+    opacity: 1;
 }
 
-/* ─── Card ─── */
+/* ═══ Question Card ═══ */
 .q-card {
-    background: rgba(20, 16, 35, 0.8);
+    background: rgba(18, 16, 28, 0.7);
     backdrop-filter: blur(28px);
     -webkit-backdrop-filter: blur(28px);
-    border-radius: 28px;
-    padding: 2.8rem 2.5rem 2rem;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 2.2rem 2rem;
     box-shadow:
-        0 24px 60px rgba(0,0,0,0.5),
-        0 0 0 1px rgba(255,255,255,0.04) inset;
+        0 32px 64px -16px rgba(0, 0, 0, 0.5),
+        0 0 1px 1px rgba(255, 255, 255, 0.04) inset;
     position: relative;
     overflow: hidden;
 }
-
-/* cluster glow accent line at top of card */
 .q-card::before {
     content: '';
     position: absolute;
-    top: 0; left: 10%; width: 80%; height: 2px;
+    top: 0; left: 0; right: 0;
+    height: 2px;
     background: linear-gradient(90deg, transparent, var(--cluster-color, #a78bfa), transparent);
-    border-radius: 999px;
-    opacity: 0.7;
-    transition: all 0.4s ease;
+    opacity: 0.6;
 }
 
-/* ─── Cluster badge ─── */
+/* ── Cluster badge ── */
 .q-cluster-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
     padding: 5px 14px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
+    border-radius: 50px;
+    font-size: 0.78rem;
+    font-weight: 600;
     border: 1px solid;
-    margin-bottom: 1.6rem;
-    transition: all 0.4s ease;
+    margin-bottom: 1.2rem;
 }
 
-/* ─── Question text ─── */
+/* ── Question text ── */
 .q-question {
-    font-size: 1.45rem;
-    font-weight: 650;
-    line-height: 1.58;
-    color: rgba(255,255,255,0.94);
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #fff;
     margin-bottom: 0.6rem;
-    letter-spacing: 0.005em;
+    letter-spacing: -0.01em;
 }
 
-/* ─── Encouragement ─── */
+/* ── Encouragement ── */
 .q-encouragement {
-    font-size: 0.85rem;
-    color: rgba(255,255,255,0.32);
-    margin-bottom: 2rem;
-    font-style: italic;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 1.6rem;
 }
 
-/* ─── Scale cards grid ─── */
+/* ═══ Scale Grid ═══ */
 .q-scale-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 0.6rem;
+    gap: 10px;
     margin-bottom: 1.2rem;
 }
 
@@ -203,152 +247,156 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 4px;
-    padding: 0.85rem 0.4rem;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
+    gap: 5px;
+    padding: 14px 8px 12px;
     border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.03);
     cursor: pointer;
-    transition: border-color 0.2s, background 0.2s;
-    position: relative;
     font-family: inherit;
-    color: var(--text-primary);
+    color: inherit;
+    position: relative;
+    transition: border-color 0.25s, background 0.25s;
 }
-
-.q-scale-card:hover:not(.active) {
-    background: rgba(255,255,255,0.08);
-    border-color: rgba(255,255,255,0.2);
+.q-scale-card:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .q-scale-emoji {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     line-height: 1;
 }
-
 .q-scale-num {
-    font-size: 1rem;
-    font-weight: 800;
-    color: rgba(255,255,255,0.5);
-    transition: color 0.2s;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.7);
+    transition: color 0.25s;
 }
-
 .q-scale-label {
     font-size: 0.68rem;
-    font-weight: 600;
-    color: rgba(255,255,255,0.35);
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.35);
     text-align: center;
-    line-height: 1.2;
-    letter-spacing: 0.01em;
 }
-
 .q-scale-check {
     position: absolute;
     top: 6px; right: 6px;
-    background: rgba(255,255,255,0.2);
-    border-radius: 50%;
     width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--cluster-color, #a78bfa);
     display: flex;
     align-items: center;
     justify-content: center;
+    color: #fff;
 }
 
-/* ─── Keyboard hint ─── */
+/* ── Keyboard hint ── */
 .q-keyboard-hint {
-    font-size: 0.74rem;
-    color: rgba(255,255,255,0.2);
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.25);
     text-align: center;
-    margin-bottom: 1.8rem;
-    letter-spacing: 0.01em;
+    margin-bottom: 1.2rem;
 }
-
 .q-keyboard-hint kbd {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 5px;
+    display: inline-block;
     padding: 1px 6px;
-    font-size: 0.7rem;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     font-family: inherit;
-    color: rgba(255,255,255,0.5);
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.45);
 }
 
-/* ─── Navigation ─── */
+/* ═══ Navigation ═══ */
 .q-nav {
     display: flex;
     justify-content: space-between;
-    gap: 1rem;
+    align-items: center;
 }
-
 .q-back-btn {
-    padding: 11px 20px;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 40px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: rgba(255,255,255,0.7);
-    cursor: pointer;
     display: flex;
     align-items: center;
     gap: 6px;
-    transition: background 0.2s, border-color 0.2s;
-    font-family: inherit;
-}
-
-.q-back-btn:hover {
-    background: rgba(255,255,255,0.1);
-    border-color: rgba(255,255,255,0.2);
-}
-
-.q-next-btn {
-    padding: 11px 28px;
-    background: var(--gradient-btn);
-    border: 1px solid rgba(255,255,255,0.25);
-    border-radius: 40px;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: white;
+    padding: 10px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.6);
     cursor: pointer;
+    font-family: inherit;
+    font-size: 0.88rem;
+    font-weight: 500;
+    transition: all 0.25s;
+}
+.q-back-btn:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.07);
+    color: #fff;
+}
+.q-next-btn {
     display: flex;
     align-items: center;
     gap: 8px;
-    transition: all 0.25s ease;
-    box-shadow: 0 6px 20px rgba(124,58,237,0.3);
+    padding: 12px 28px;
+    border: none;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    cursor: pointer;
     font-family: inherit;
+    font-size: 0.92rem;
+    font-weight: 600;
+    transition: all 0.25s;
+    box-shadow: 0 6px 20px -6px rgba(0, 0, 0, 0.3);
 }
-
-.q-next-btn:hover:not(.disabled) {
-    box-shadow: 0 8px 28px rgba(124,58,237,0.5);
-    transform: translateY(-2px);
-}
-
 .q-next-btn.disabled {
-    opacity: 0.38;
+    opacity: 0.35;
     cursor: not-allowed;
-    box-shadow: none;
-    background: rgba(255,255,255,0.08) !important;
-    border-color: rgba(255,255,255,0.1);
+}
+.q-next-btn:not(.disabled):hover {
+    box-shadow: 0 10px 28px -6px rgba(0, 0, 0, 0.5);
 }
 
-/* ─── Responsive ─── */
-@media (max-width: 768px) {
-    .q-wrapper { padding-top: 72px; }
-    .q-container { padding: 1.5rem 1rem 4rem; }
-    .q-card { padding: 2rem 1.4rem 1.6rem; border-radius: 22px; }
-    .q-question { font-size: 1.2rem; }
-    .q-scale-grid { gap: 0.4rem; }
-    .q-scale-card { padding: 0.7rem 0.25rem; border-radius: 12px; }
-    .q-scale-emoji { font-size: 1.25rem; }
-    .q-scale-label { font-size: 0.6rem; }
-    .q-keyboard-hint { display: none; }
+/* ═══ Responsive ═══ */
+@media (max-width: 600px) {
+    .q-card {
+        padding: 1.5rem 1.2rem;
+        border-radius: 20px;
+    }
+    .q-question {
+        font-size: 1.08rem;
+    }
+    .q-scale-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 6px;
+    }
+    .q-scale-card {
+        padding: 10px 4px 8px;
+        border-radius: 12px;
+    }
+    .q-scale-emoji {
+        font-size: 1.15rem;
+    }
+    .q-scale-num {
+        font-size: 0.82rem;
+    }
+    .q-scale-label {
+        font-size: 0.6rem;
+    }
+    .q-keyboard-hint {
+        display: none;
+    }
+    .q-progress-header {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
 }
 
-@media (max-width: 480px) {
-    .q-scale-grid { grid-template-columns: repeat(5, 1fr); gap: 0.3rem; }
-    .q-scale-card { padding: 0.65rem 0.15rem; border-radius: 10px; }
-    .q-scale-emoji { font-size: 1.1rem; }
-    .q-scale-num { font-size: 0.85rem; }
-    .q-scale-label { display: none; }
-    .q-nav { flex-direction: column; }
-    .q-back-btn, .q-next-btn { width: 100%; justify-content: center; }
+@media (max-width: 380px) {
+    .q-scale-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 4px;
+    }
 }

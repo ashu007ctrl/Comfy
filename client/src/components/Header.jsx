@@ -61,6 +61,19 @@ const Header = () => {
 
     const showWhite = !isHomePage || scrolled;
 
+    // Navigation items — different for home vs. other pages
+    const navItems = isHomePage
+        ? [
+            { label: 'Home', action: () => scrollTo('home'), isSection: true, id: 'home' },
+            { label: 'About', action: () => scrollTo('about'), isSection: true, id: 'about' },
+            { label: 'Contact', action: () => scrollTo('contact'), isSection: true, id: 'contact' },
+        ]
+        : [
+            { label: 'Home', to: '/' },
+            { label: 'About', to: '/about' },
+            { label: 'Contact', to: '/contact' },
+        ];
+
     return (
         <motion.header
             initial={{ y: -80, opacity: 0 }}
@@ -99,10 +112,8 @@ const Header = () => {
                         fontWeight: '700',
                         letterSpacing: '-0.03em',
                         color: '#ffffffff',
-
                         cursor: 'pointer',
                     }}
-
                     onClick={() => {
                         navigate('/');
                         setIsMobileMenuOpen(false);
@@ -137,7 +148,7 @@ const Header = () => {
                                 backdropFilter: 'blur(4px)',
                                 zIndex: 998
                             }}
-                            className="mobile-overlay" /* Optional hide on desktop via CSS if needed, but display flex handles it mostly */
+                            className="mobile-overlay"
                         />
                     )}
                 </AnimatePresence>
@@ -145,20 +156,19 @@ const Header = () => {
                 {/* Navigation Links */}
                 <nav>
                     <ul className={`nav-links ${isMobileMenuOpen ? 'open' : ''}`}>
-                        {isHomePage && ['Home', 'About', 'Contact'].map((item) => {
-                            const id = item.toLowerCase();
-                            return (
-                                <li key={item}>
+                        {navItems.map((item) => (
+                            <li key={item.label}>
+                                {item.isSection ? (
                                     <motion.button
-                                        onClick={() => scrollTo(id)}
+                                        onClick={item.action}
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
                                         style={{
                                             background: 'none',
                                             border: 'none',
                                             fontSize: isMobileMenuOpen ? '1.2rem' : '0.9rem',
-                                            fontWeight: activeSection === id ? '600' : '400',
-                                            color: activeSection === id ? 'var(--primary)' : 'var(--text-secondary)',
+                                            fontWeight: activeSection === item.id ? '600' : '400',
+                                            color: activeSection === item.id ? 'var(--primary)' : 'var(--text-secondary)',
                                             cursor: 'pointer',
                                             position: 'relative',
                                             padding: '5px 2px',
@@ -168,8 +178,8 @@ const Header = () => {
                                             textAlign: isMobileMenuOpen ? 'left' : 'center',
                                         }}
                                     >
-                                        {item}
-                                        {activeSection === id && !isMobileMenuOpen && (
+                                        {item.label}
+                                        {activeSection === item.id && !isMobileMenuOpen && (
                                             <motion.div
                                                 layoutId="nav-underline"
                                                 style={{
@@ -185,15 +195,39 @@ const Header = () => {
                                             />
                                         )}
                                     </motion.button>
-                                </li>
-                            );
-                        })}
-
-                        {!isHomePage && (
-                            <li>
-                                <Link to="/" onClick={() => setIsMobileMenuOpen(false)} style={{ textDecoration: 'none', color: 'var(--text-secondary)', fontWeight: '500', fontSize: isMobileMenuOpen ? '1.2rem' : '0.9rem', padding: '5px 2px', display: 'block' }}>Home</Link>
+                                ) : (
+                                    <Link
+                                        to={item.to}
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                        style={{
+                                            textDecoration: 'none',
+                                            color: location.pathname === item.to ? 'var(--primary)' : 'var(--text-secondary)',
+                                            fontWeight: location.pathname === item.to ? '600' : '500',
+                                            fontSize: isMobileMenuOpen ? '1.2rem' : '0.9rem',
+                                            padding: '5px 2px',
+                                            display: 'block',
+                                            position: 'relative',
+                                        }}
+                                    >
+                                        {item.label}
+                                        {location.pathname === item.to && !isMobileMenuOpen && (
+                                            <motion.div
+                                                layoutId="nav-underline"
+                                                style={{
+                                                    position: 'absolute',
+                                                    bottom: 0,
+                                                    left: 0,
+                                                    width: '100%',
+                                                    height: '2px',
+                                                    background: 'var(--primary)',
+                                                    borderRadius: '2px',
+                                                }}
+                                            />
+                                        )}
+                                    </Link>
+                                )}
                             </li>
-                        )}
+                        ))}
 
                         {user ? (
                             <>

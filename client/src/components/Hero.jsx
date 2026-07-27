@@ -30,7 +30,7 @@ const Hero = ({ onStart }) => {
                                 alt="Google Gemini AI logo powering Comfy stress analysis"
                                 className="gemini-logo"
                             />
-                            AI-Powered by Gemini
+                            AI-Powered by Gemini 3.1 Pro
                         </div>
 
                         {/* Main Title — SEO H1 with brand + primary keyword */}

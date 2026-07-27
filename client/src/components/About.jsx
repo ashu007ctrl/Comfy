@@ -1,10 +1,15 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Heart, ShieldCheck, Zap } from 'lucide-react';
+import { Heart, ShieldCheck, Zap, Sparkles } from 'lucide-react';
 import './About.css';
 
 const About = () => {
     const features = [
+        {
+            icon: Sparkles,
+            title: 'Gemini 3.1 Pro AI',
+            text: 'Powered by Google\'s latest frontier model — Gemini 3.1 Pro delivers deeply personalized stress analysis with advanced reasoning capabilities.'
+        },
         {
             icon: Heart,
             title: 'Personalized Care',
@@ -27,7 +32,7 @@ const About = () => {
         visible: {
             opacity: 1,
             transition: {
-                staggerChildren: 0.2
+                staggerChildren: 0.15
             }
         }
     };
@@ -62,12 +67,12 @@ const About = () => {
                     transition={{ duration: 0.6 }}
                 >
                     <div className="about-badge">Why Choose Comfy</div>
-                    <h2 className="about-title">How Comfy's AI Stress Analysis Works</h2>
+                    <h2 className="about-title">AI Stress Analysis Powered by Gemini 3.1 Pro</h2>
                     <p className="about-description">
-                        Comfy uses advanced artificial intelligence to analyze your responses and deliver
-                        accurate stress detection results. Whether you're dealing with work stress, academic
-                        pressure, or everyday anxiety, our AI stress analyzer provides personalized insights
-                        to help you understand and manage your mental wellness effectively.
+                        Comfy uses Google's <strong>Gemini 3.1 Pro</strong> — one of the world's most advanced AI reasoning
+                        models — to analyze your responses and deliver deeply personalized stress insights. Whether you're
+                        dealing with work stress, academic pressure, or everyday anxiety, our AI provides tailored
+                        recommendations to help you understand and manage your mental wellness effectively.
                     </p>
                 </motion.div>
 

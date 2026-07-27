@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, ArrowLeft, Check, Briefcase, Heart, Moon, Users, Leaf, Clock } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Check, Briefcase, Heart, Moon, Users, Leaf, Clock, Sparkles } from 'lucide-react';
 import SEOHelmet from './SEOHelmet';
 import './Questionnaire.css';
 
@@ -53,6 +53,11 @@ const Questionnaire = ({ questions, language = 'English', onSubmit, onCancel }) 
     const meta = CLUSTER_META[currentQuestion.cluster] || { color: '#a78bfa', bg: 'rgba(167,139,250,0.1)', emoji: '💡', label: currentQuestion.cluster };
     const ClusterIcon = meta.icon || Briefcase;
 
+    // Circular progress values
+    const circleRadius = 22;
+    const circumference = 2 * Math.PI * circleRadius;
+    const strokeDash = (progress / 100) * circumference;
+
     const handleAnswer = useCallback((value) => {
         setAnswers(prev => ({ ...prev, [currentQuestion.id]: value }));
     }, [currentQuestion.id]);
@@ -94,7 +99,7 @@ const Questionnaire = ({ questions, language = 'English', onSubmit, onCancel }) 
                 title="Stress Assessment — Comfy"
                 description="Answer 10 personalized questions to get your AI stress analysis."
                 keywords="stress test, stress assessment, mental health"
-                url="https://mycomfyy.netlify.app/assessment"
+                url="https://aistressanalyzer.netlify.app/assessment"
             />
 
             {/* Background blobs */}
@@ -103,40 +108,65 @@ const Questionnaire = ({ questions, language = 'English', onSubmit, onCancel }) 
 
             <div className="q-container">
 
-                {/* ── Progress ── */}
-                <div className="q-progress-wrap">
-                    <div className="q-progress-info">
-                        <span className="q-progress-step">Question {currentStep + 1} <span className="q-progress-of">of {questions.length}</span></span>
+                {/* ── Progress header ── */}
+                <div className="q-progress-header">
+                    <div className="q-progress-left">
+                        {/* Circular progress */}
+                        <div className="q-progress-circle">
+                            <svg viewBox="0 0 52 52" className="q-progress-svg">
+                                <circle cx="26" cy="26" r={circleRadius} className="q-progress-bg-ring" />
+                                <circle
+                                    cx="26" cy="26" r={circleRadius}
+                                    className="q-progress-fill-ring"
+                                    style={{
+                                        stroke: meta.color,
+                                        strokeDasharray: circumference,
+                                        strokeDashoffset: circumference - strokeDash,
+                                    }}
+                                />
+                            </svg>
+                            <span className="q-progress-number">{currentStep + 1}</span>
+                        </div>
+                        <div className="q-progress-text">
+                            <span className="q-progress-step">Question {currentStep + 1} <span className="q-progress-of">of {questions.length}</span></span>
+                            <div className="q-ai-tag">
+                                <Sparkles size={10} />
+                                Gemini 3.1 Pro
+                            </div>
+                        </div>
+                    </div>
+                    <div className="q-progress-right">
                         <div className="q-time-pill">
                             <Clock size={12} />
                             {totalMins < 1 ? 'Last one!' : `~${totalMins} min left`}
                         </div>
-                        <span className="q-progress-pct">{Math.round(progress)}%</span>
                     </div>
-                    <div className="q-progress-track">
-                        <motion.div
-                            className="q-progress-fill"
-                            style={{ background: `linear-gradient(90deg, ${meta.color}cc, ${meta.color})` }}
-                            initial={{ width: 0 }}
-                            animate={{ width: `${progress}%` }}
-                            transition={{ type: 'spring', stiffness: 80, damping: 20 }}
-                        />
-                    </div>
+                </div>
 
-                    {/* Cluster dots */}
-                    <div className="q-cluster-dots">
-                        {questions.map((q, i) => {
-                            const m = CLUSTER_META[q.cluster] || meta;
-                            return (
-                                <div
-                                    key={i}
-                                    className={`q-cluster-dot ${i === currentStep ? 'current' : ''} ${answers[q.id] !== undefined ? 'answered' : ''}`}
-                                    style={{ background: i === currentStep ? m.color : answers[q.id] !== undefined ? m.color + '90' : undefined }}
-                                    title={q.cluster}
-                                />
-                            );
-                        })}
-                    </div>
+                {/* ── Linear progress bar ── */}
+                <div className="q-progress-track">
+                    <motion.div
+                        className="q-progress-fill"
+                        style={{ background: `linear-gradient(90deg, ${meta.color}cc, ${meta.color})` }}
+                        initial={{ width: 0 }}
+                        animate={{ width: `${progress}%` }}
+                        transition={{ type: 'spring', stiffness: 80, damping: 20 }}
+                    />
+                </div>
+
+                {/* ── Cluster dots ── */}
+                <div className="q-cluster-dots">
+                    {questions.map((q, i) => {
+                        const m = CLUSTER_META[q.cluster] || meta;
+                        return (
+                            <div
+                                key={i}
+                                className={`q-cluster-dot ${i === currentStep ? 'current' : ''} ${answers[q.id] !== undefined ? 'answered' : ''}`}
+                                style={{ background: i === currentStep ? m.color : answers[q.id] !== undefined ? m.color + '90' : undefined }}
+                                title={q.cluster}
+                            />
+                        );
+                    })}
                 </div>
 
                 {/* ── Question Card ── */}
@@ -175,9 +205,9 @@ const Questionnaire = ({ questions, language = 'English', onSubmit, onCancel }) 
                                         className={`q-scale-card ${isActive ? 'active' : ''}`}
                                         style={isActive ? { borderColor: meta.color, background: meta.bg, boxShadow: `0 0 0 2px ${meta.color}60, 0 8px 24px ${meta.color}30` } : {}}
                                         onClick={() => handleAnswer(val)}
-                                        whileHover={{ scale: 1.03, y: -3 }}
-                                        whileTap={{ scale: 0.97 }}
-                                        initial={{ opacity: 0, y: 12 }}
+                                        whileHover={{ scale: 1.04, y: -4 }}
+                                        whileTap={{ scale: 0.96 }}
+                                        initial={{ opacity: 0, y: 14 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: (val - 1) * 0.06, duration: 0.3 }}
                                     >

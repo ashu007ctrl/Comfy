@@ -1,368 +1,272 @@
 /* ═══════════════════════════════════════════
-   BasicInfoForm — 2-Step Premium Intake
+   BasicInfoForm — Single-Page Glassmorphism Card
    ═══════════════════════════════════════════ */
 
 .bif-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    padding: 5rem 1.5rem 3rem;
+    min-height: calc(100vh - 100px);
+    padding: 2rem 1rem;
     position: relative;
     overflow: hidden;
-    background: linear-gradient(135deg, #0a0515 0%, #120a2e 40%, #0c1a2e 75%, #061820 100%);
 }
 
-/* ─── Ambient orbs ─── */
+/* ── Ambient orbs ── */
 .bif-orb {
     position: absolute;
     border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
     pointer-events: none;
-    filter: blur(90px);
-    opacity: 0.35;
-    animation: bifOrb 10s ease-in-out infinite;
+    z-index: 0;
 }
-
 .bif-orb-1 {
-    width: 420px; height: 420px;
-    background: radial-gradient(circle, #7c3aed 0%, transparent 70%);
-    top: -120px; right: -80px;
-    animation-delay: 0s;
+    width: 350px; height: 350px;
+    background: radial-gradient(circle, #7c3aed, transparent 70%);
+    top: -80px; left: -100px;
+    animation: bif-float 8s ease-in-out infinite;
 }
-
 .bif-orb-2 {
-    width: 320px; height: 320px;
-    background: radial-gradient(circle, #0ea5e9 0%, transparent 70%);
-    bottom: -80px; left: -60px;
-    animation-delay: -4s;
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, #38bdf8, transparent 70%);
+    bottom: -60px; right: -80px;
+    animation: bif-float 10s ease-in-out infinite reverse;
 }
-
 .bif-orb-3 {
-    width: 240px; height: 240px;
-    background: radial-gradient(circle, #10b981 0%, transparent 70%);
-    top: 50%; left: 30%;
-    animation-delay: -7s;
-    opacity: 0.18;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, #f472b6, transparent 70%);
+    top: 50%; left: 60%;
+    animation: bif-float 12s ease-in-out infinite;
 }
 
-@keyframes bifOrb {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(25px, -18px) scale(1.06); }
-    66% { transform: translate(-18px, 14px) scale(0.94); }
+@keyframes bif-float {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-30px) scale(1.05); }
 }
 
-/* ─── Card ─── */
+/* ── Card ── */
 .bif-card {
-    background: rgba(255, 255, 255, 0.055);
-    backdrop-filter: blur(28px);
-    -webkit-backdrop-filter: blur(28px);
-    padding: 2.6rem 2.4rem 2rem;
-    border-radius: 28px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow:
-        0 8px 40px rgba(0, 0, 0, 0.45),
-        0 0 0 1px rgba(255, 255, 255, 0.04) inset;
-    width: 100%;
-    max-width: 480px;
     position: relative;
     z-index: 1;
+    width: 100%;
+    max-width: 640px;
+    background: rgba(18, 16, 28, 0.75);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 2.5rem 2.2rem 2rem;
+    box-shadow:
+        0 32px 64px -16px rgba(0, 0, 0, 0.6),
+        0 0 1px 1px rgba(255, 255, 255, 0.04) inset;
     overflow: hidden;
 }
 
-/* top shimmer accent */
+/* ── Top shimmer ── */
 .bif-shimmer {
     position: absolute;
-    top: 0; left: 50%;
-    transform: translateX(-50%);
-    width: 55%;
+    top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, #a855f7, #818cf8, #a855f7, transparent);
-    border-radius: 999px;
-    animation: bifShimmerSlide 3s ease-in-out infinite;
+    background: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.6), rgba(56, 189, 248, 0.4), transparent);
+    background-size: 200% 100%;
+    animation: bif-shimmer-move 3s ease-in-out infinite;
+}
+@keyframes bif-shimmer-move {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
 }
 
-@keyframes bifShimmerSlide {
-    0%, 100% { opacity: 0.6; width: 40%; }
-    50% { opacity: 1; width: 65%; }
+/* ── Header ── */
+.bif-header {
+    text-align: center;
+    margin-bottom: 1.8rem;
+}
+.bif-header h2 {
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.02em;
+}
+.bif-subtitle {
+    font-size: 0.92rem;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1.5;
+    margin: 0;
 }
 
-/* ─── Step indicator ─── */
-.bif-steps {
+/* ── AI Badge ── */
+.bif-ai-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(56, 189, 248, 0.1));
+    border: 1px solid rgba(167, 139, 250, 0.25);
+    border-radius: 50px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #a78bfa;
+    margin-bottom: 1rem;
+    letter-spacing: 0.02em;
+}
+.bif-ai-badge svg {
+    color: #a78bfa;
+}
+
+/* ── Section label ── */
+.bif-section-label {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 8px;
-    margin-bottom: 1.6rem;
-}
-
-.bif-step-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
-    transition: all 0.35s ease;
-}
-
-.bif-step-dot.active {
-    background: #a855f7;
-    width: 24px;
-    border-radius: 4px;
-    box-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
-}
-
-.bif-step-dot.done {
-    background: #10b981;
-}
-
-.bif-step-label {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     font-weight: 600;
     color: rgba(255, 255, 255, 0.45);
-    margin-left: 8px;
-    letter-spacing: 0.08em;
     text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 0.2rem;
+    margin-bottom: -0.2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.bif-section-label svg {
+    opacity: 0.5;
+}
+.bif-section-lifestyle {
+    margin-top: 0.8rem;
 }
 
-/* ─── Typography ─── */
-.bif-card h2 {
-    font-size: 1.7rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, #e9d5ff 0%, #c084fc 50%, #a78bfa 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-align: center;
-    letter-spacing: -0.025em;
-    margin-bottom: 0.35rem;
-}
-
-.bif-subtitle {
-    text-align: center;
-    font-size: 0.88rem;
-    color: rgba(255, 255, 255, 0.42);
-    margin-bottom: 1.8rem;
-    line-height: 1.5;
-}
-
-/* ─── Fields ─── */
-.bif-field {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 14px;
-    padding: 0.65rem 1rem;
-    margin-bottom: 0.75rem;
+/* ── Form grid ── */
+.bif-form-grid {
     display: flex;
     flex-direction: column;
-    transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    gap: 1rem;
 }
 
-.bif-field:hover {
-    background: rgba(255, 255, 255, 0.065);
-    border-color: rgba(168, 85, 247, 0.18);
+/* ── Field row (2-column) ── */
+.bif-field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
 }
 
-.bif-field:focus-within {
-    border-color: rgba(168, 85, 247, 0.5);
-    background: rgba(168, 85, 247, 0.055);
-    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1), 0 0 18px rgba(168, 85, 247, 0.07);
-    transform: translateY(-1px);
+/* ── Field ── */
+.bif-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
-
+.bif-field-full {
+    width: 100%;
+}
 .bif-field label {
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 0.72rem;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.4);
-    text-transform: uppercase;
-    letter-spacing: 0.065em;
-    margin-bottom: 0.2rem;
-    transition: color 0.3s ease;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
 }
-
-.bif-field:focus-within label {
-    color: rgba(192, 132, 252, 0.9);
-}
-
-.bif-field label svg {
-    opacity: 0.55;
-    transition: opacity 0.3s;
-}
-
-.bif-field:focus-within label svg {
-    opacity: 1;
-}
-
-.bif-field input,
-.bif-field select {
-    border: none;
-    background: transparent;
-    font-size: 1rem;
-    font-family: inherit;
-    color: rgba(255, 255, 255, 0.92);
-    width: 100%;
-    outline: none;
-    padding: 0.2rem 0 0.05rem;
-    caret-color: #c084fc;
-}
-
-.bif-field input::placeholder {
-    color: rgba(255, 255, 255, 0.18);
-    font-weight: 400;
-}
-
-.bif-field select {
-    cursor: pointer;
-    -webkit-appearance: none;
-    appearance: none;
-}
-
-.bif-field select option {
-    background: #130d2e;
-    color: #e2e8f0;
-}
-
-.bif-field input[type="number"]::-webkit-inner-spin-button,
-.bif-field input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
 .bif-optional {
-    opacity: 0.45;
+    font-size: 0.72rem;
     font-weight: 400;
-    font-size: 0.68rem;
-    text-transform: none;
-    letter-spacing: 0;
+    color: rgba(255, 255, 255, 0.3);
     margin-left: 2px;
 }
+.bif-field input,
+.bif-field select {
+    width: 100%;
+    padding: 11px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.04);
+    color: #fff;
+    font-family: inherit;
+    font-size: 0.92rem;
+    transition: all 0.25s ease;
+    outline: none;
+}
+.bif-field input::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+}
+.bif-field input:focus,
+.bif-field select:focus {
+    border-color: rgba(167, 139, 250, 0.5);
+    background: rgba(167, 139, 250, 0.06);
+    box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.1);
+}
+.bif-field input:hover,
+.bif-field select:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+}
+.bif-field select option {
+    background: #1a1625;
+    color: #fff;
+}
 
-/* ─── Buttons ─── */
+/* ── Submit ── */
+.bif-submit-wrap {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+}
 .bif-btn {
-    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 55%, #c084fc 100%);
-    background-size: 200% 200%;
-    color: white;
-    border: none;
-    padding: 0.9rem 1.8rem;
-    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 36px;
     font-size: 1rem;
     font-weight: 600;
     font-family: inherit;
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #8b5cf6, #6d28d9);
     cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 24px -6px rgba(109, 40, 217, 0.45);
     width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 1rem;
-    overflow: hidden;
-    position: relative;
-    box-shadow: 0 4px 22px rgba(124, 58, 237, 0.38), 0 0 0 1px rgba(168, 85, 247, 0.2) inset;
-    transition: box-shadow 0.35s ease, transform 0.25s ease;
-    animation: bifBtnPulse 3.5s ease-in-out infinite;
+    max-width: 340px;
 }
-
-@keyframes bifBtnPulse {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+.bif-btn:hover:not(.bif-btn--disabled):not(.bif-btn--loading) {
+    background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+    box-shadow: 0 12px 32px -6px rgba(109, 40, 217, 0.6);
 }
-
-.bif-btn::before {
-    content: "";
-    position: absolute;
-    top: 0; left: -100%;
-    width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-    transition: left 0.55s ease;
-}
-
-.bif-btn:hover::before { left: 100%; }
-
-.bif-btn:hover:not(.bif-btn--disabled) {
-    box-shadow: 0 6px 32px rgba(124, 58, 237, 0.52), 0 0 0 1px rgba(168, 85, 247, 0.3) inset;
-    transform: translateY(-2px);
-}
-
 .bif-btn--disabled {
-    opacity: 0.5;
+    opacity: 0.4;
     cursor: not-allowed;
-    animation: none;
-    transform: none !important;
 }
-
 .bif-btn--loading {
-    pointer-events: none;
-    opacity: 0.8;
+    opacity: 0.85;
+    cursor: wait;
 }
 
-@keyframes bifSpin {
+/* ── Spin animation ── */
+.bif-spin {
+    animation: bif-spin 1.2s linear infinite;
+}
+@keyframes bif-spin {
+    from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
 }
 
-.bif-spin {
-    animation: bifSpin 1s linear infinite;
-}
-
-/* ─── Back button row ─── */
-.bif-nav-row {
-    display: flex;
-    gap: 0.75rem;
-    align-items: center;
-    margin-top: 1rem;
-}
-
-.bif-back-btn {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 14px;
-    padding: 0.9rem 1.2rem;
-    color: rgba(255,255,255,0.7);
-    font-size: 0.95rem;
-    font-family: inherit;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: background 0.2s, border-color 0.2s;
-    flex-shrink: 0;
-}
-
-.bif-back-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
-}
-
-.bif-nav-row .bif-btn {
-    flex: 1;
-    margin-top: 0;
-}
-
-/* ─── Responsive ─── */
-@media (max-width: 520px) {
+/* ═══════════════════════════════════════════
+   Responsive
+   ═══════════════════════════════════════════ */
+@media (max-width: 600px) {
     .bif-card {
-        padding: 2rem 1.4rem 1.6rem;
+        padding: 1.8rem 1.2rem 1.5rem;
         border-radius: 20px;
     }
-
-    .bif-card h2 { font-size: 1.45rem; }
-    .bif-subtitle { font-size: 0.82rem; }
-    .bif-field { padding: 0.6rem 0.85rem; }
-
-    .bif-field input,
-    .bif-field select { font-size: 0.95rem; }
-
-    .bif-btn { padding: 0.85rem 1.4rem; font-size: 0.95rem; }
-}
-
-@media (max-width: 420px) {
-    .bif-wrapper { padding: 80px 0.75rem 2rem; }
-    .bif-card { padding: 1.6rem 1.1rem 1.4rem; border-radius: 18px; }
-    .bif-card h2 { font-size: 1.3rem; }
-    .bif-step-label { display: none; } /* hide step text, keep dots */
-    .bif-grid-2 { grid-template-columns: 1fr; }  /* stack 2-col selects */
-    .bif-orb { display: none; } /* hide decorative blobs for perf */
-    .bif-nav-row { flex-direction: column; }
-    .bif-nav-row .bif-btn { width: 100%; justify-content: center; }
-    .bif-back-btn { width: 100%; justify-content: center; }
+    .bif-header h2 {
+        font-size: 1.3rem;
+    }
+    .bif-field-row {
+        grid-template-columns: 1fr;
+    }
+    .bif-btn {
+        max-width: 100%;
+    }
 }

@@ -75,16 +75,20 @@
 }
 
 .about-description {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     line-height: 1.8;
     color: rgba(255, 255, 255, 0.8);
+}
+.about-description strong {
+    color: #a78bfa;
+    font-weight: 600;
 }
 
 /* Feature Cards */
 .about-features {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
 }
 
 .about-feature-card {

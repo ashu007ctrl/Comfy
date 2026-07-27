@@ -42,7 +42,7 @@ const Footer = () => {
                         }}>
                             Comfy is a free AI stress analyzer that helps you assess your stress levels,
                             detect burnout, and receive personalized mental wellness insights — powered
-                            by Google Gemini AI.
+                            by Google Gemini 3.1 Pro.
                         </p>
                     </div>
 
@@ -70,8 +70,8 @@ const Footer = () => {
                                 {[
                                     { label: 'Home', to: '/' },
                                     { label: 'Take Stress Test', to: '/assessment' },
-                                    { label: 'Sign In', to: '/login' },
-                                    { label: 'Create Account', to: '/register' }
+                                    { label: 'About', to: '/about' },
+                                    { label: 'Contact', to: '/contact' },
                                 ].map((link) => (
                                     <li key={link.to}>
                                         <Link
@@ -93,7 +93,7 @@ const Footer = () => {
                         </nav>
                     </div>
 
-                    {/* Resources */}
+                    {/* Legal */}
                     <div>
                         <div style={{
                             fontSize: '0.85rem',
@@ -103,7 +103,7 @@ const Footer = () => {
                             textTransform: 'uppercase',
                             letterSpacing: '0.05em'
                         }}>
-                            Resources
+                            Legal
                         </div>
                         <ul style={{
                             listStyle: 'none',
@@ -113,16 +113,42 @@ const Footer = () => {
                             flexDirection: 'column',
                             gap: '0.5rem'
                         }}>
-                            {['AI Stress Analysis', 'Mental Wellness Tips', 'Breathing Exercises', 'Burnout Detection'].map((item) => (
-                                <li key={item}>
-                                    <span style={{
-                                        color: 'rgba(255, 255, 255, 0.55)',
-                                        fontSize: '0.88rem'
-                                    }}>
-                                        {item}
-                                    </span>
+                            {[
+                                { label: 'Terms & Conditions', to: '/terms' },
+                                { label: 'Privacy Policy', to: '/terms#privacy' },
+                                { label: 'AI Usage Policy', to: '/terms#ai' },
+                            ].map((link) => (
+                                <li key={link.to}>
+                                    <Link
+                                        to={link.to}
+                                        style={{
+                                            color: 'rgba(255, 255, 255, 0.55)',
+                                            textDecoration: 'none',
+                                            fontSize: '0.88rem',
+                                            transition: 'color 0.2s ease'
+                                        }}
+                                        onMouseEnter={(e) => e.target.style.color = '#a78bfa'}
+                                        onMouseLeave={(e) => e.target.style.color = 'rgba(255, 255, 255, 0.55)'}
+                                    >
+                                        {link.label}
+                                    </Link>
                                 </li>
                             ))}
+                            <li>
+                                <Link
+                                    to="/login"
+                                    style={{
+                                        color: 'rgba(255, 255, 255, 0.55)',
+                                        textDecoration: 'none',
+                                        fontSize: '0.88rem',
+                                        transition: 'color 0.2s ease'
+                                    }}
+                                    onMouseEnter={(e) => e.target.style.color = '#a78bfa'}
+                                    onMouseLeave={(e) => e.target.style.color = 'rgba(255, 255, 255, 0.55)'}
+                                >
+                                    Sign In
+                                </Link>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -143,7 +169,7 @@ const Footer = () => {
                     gap: '0.8rem'
                 }}>
                     <p style={{ margin: 0, fontSize: '0.82rem', color: 'rgba(255, 255, 255, 0.45)' }}>
-                        © {currentYear} Comfy — AI Stress Analyzer. All rights reserved.
+                        © {currentYear} Comfy — AI Stress Analyzer. Powered by Google Gemini 3.1 Pro.
                     </p>
                     <p style={{ margin: 0, fontSize: '0.82rem', color: 'rgba(255, 255, 255, 0.35)' }}>
                         Not a substitute for professional medical advice.
